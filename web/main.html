@@ -14,6 +14,77 @@
 	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
 	<script type="text/javascript" src="./assets/js/common.js"></script>
 	<title>메인</title>
+	<script>
+		postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanMain', {})
+		.then((res) => {
+			// 서버로부터 받은 데이터를 사용하여 원하는 작업을 수행
+			if (nvl(res.map.list1, '') != '') {
+				list1(1, res.map.list1);
+			}
+			if (nvl(res.map.list2, '') != '') {
+				list1(2, res.map.list2);
+			}
+		})
+		.catch((err) => {
+			alert("네트워크 오류가 발생!!.");
+			console.error('Error sending/receiving data:', err); // 데이터 전송 또는 수신 중 오류 발생 시 메시지 출력
+		});
+
+
+		function list1(num, slideData) {
+			// Get the swiper-wrapper element
+			var swiperWrapper = document.getElementById('swiper-wrapper' + num);
+
+			// Iterate through the slideData array and create HTML dynamically
+			slideData.forEach(function (data) {
+				var slide = document.createElement('div');
+				slide.className = 'swiper-slide';
+
+				if (nvl(data.NEW_VALUE, '') == 'Y') {
+					var item = document.createElement('div');
+					item.className = 'item new';
+				} else {
+					var item = document.createElement('div');
+					item.className = 'item new2';
+				}
+
+				var name = document.createElement('p');
+				name.className = 'name';
+				name.textContent = data.COMP_NM;
+
+				var tel = document.createElement('p');
+				tel.className = 'tel';
+				tel.textContent = '연락처 : ' + data.DEBTOR_TEL;
+
+				var infoWrap = document.createElement('div');
+				infoWrap.className = 'info_wrap';
+
+				// Hardcoded HTML for infoContent
+				infoWrap.innerHTML = `
+				  <p>카카오톡 : <span>${data.DEBTOR_KAKAO}</span></p>
+				  <p>텔레그램 : <span>${data.DEBTOR_TELE}</span></p>
+				  <p>기타SNS : <span>${data.DEBTOR_SNS}</span></p>
+				`;
+
+				var btnWrap = document.createElement('div');
+				btnWrap.className = 'btn_wrap';
+
+				var btn = document.createElement('a');
+				btn.href = '#';
+				btn.className = 'btn';
+				btn.innerHTML = '<span>자세히보기</span>';
+
+				// Append elements to the DOM
+				btnWrap.appendChild(btn);
+				item.appendChild(name);
+				item.appendChild(tel);
+				item.appendChild(infoWrap);
+				item.appendChild(btnWrap);
+				slide.appendChild(item);
+				swiperWrapper.appendChild(slide);
+			});
+		}
+	</script>
 </head>
 <body>
 <!-- #WRAP -->
@@ -39,7 +110,6 @@
 			</nav>
 
 			<div class="util_menu">
-				<a href="#" title="로그인">로그인</a>
 				<a href="cs_01.html" title="고객센터">고객센터</a>
 			</div>
 
@@ -65,7 +135,6 @@
 			</ul>
 		</nav>
 		<div class="gnb_btn_wrap">
-			<a href="#" class="btn">로그인</a>
 			<a href="#" class="btn">고객센터</a>
 		</div>
 	</div>
@@ -123,8 +192,8 @@
 						<a href="#" class="more">더보기</a>
 					</div>
 					<div class="user_list user_slide swiper">
-						<div class="swiper-wrapper">
-							<div class="swiper-slide">
+						<div class="swiper-wrapper" id="swiper-wrapper1">
+							<!--<div class="swiper-slide">
 								<div class="item new">
 									<p class="name"> 마음대부 갑대리</p>
 
@@ -285,7 +354,7 @@
 										</a>
 									</div>
 								</div>
-							</div>
+							</div>-->
 						</div>
 					</div>
 				</section>
@@ -340,8 +409,8 @@
 						<a href="#" class="more">더보기</a>
 					</div>
 					<div class="user_list main_user_slide swiper">
-						<div class="swiper-wrapper">
-							<div class="swiper-slide">
+						<div class="swiper-wrapper" id="swiper-wrapper2">
+							<!--<div class="swiper-slide">
 								<div class="item new">
 									<p class="name"> 마음대부 갑대리</p>
 
@@ -502,7 +571,7 @@
 										</a>
 									</div>
 								</div>
-							</div>
+							</div>-->
 						</div>
 					</div>
 				</section>

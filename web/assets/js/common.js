@@ -215,6 +215,28 @@ function csList(){ //고객센터
 
 }
 
+function postData2(url, param) {
+
+	//헤더 정보가 필요한 경우에만 추가
+	const headers = {
+		"Content-Type": "application/json;charset=UTF-8",
+		"x-requested-with": "XMLHttpRequest",
+	};
+
+	try {
+		const response = fetch(url, {
+			method: "POST",
+			headers: headers,
+			body: JSON.stringify(param),
+		});
+		return response.json(); // 서버로부터 받은 데이터를 JSON 형태로 변환
+		//console.log(data); // 변환된 데이터를 출력
+	} catch (error) {
+		alert("네트워크 오류가 발생!!.");
+		console.error("Error fetching data:", error);  // 오류 발생 시 메시지 출력	}
+	}
+
+}
 
 //******* Fetch sync POST 요청 *******
 async function postData(url, param) {
@@ -338,9 +360,4 @@ function commonRegWrite(dm_type){
 			alert("네트워크 오류가 발생!!.");
 			console.error('Error sending/receiving data:', err); // 데이터 전송 또는 수신 중 오류 발생 시 메시지 출력
 		});
-
-
-
-
-
 }
