@@ -306,7 +306,7 @@ function commonRegWrite(dm_type){
 	//let dm_kind = "; //계좌
 	//let dm_kind = "; //스마트출금위치
 	//let apiUrl = "http://localhost:8080/api/web/v1/regWrite";
-	let apiUrl = "http://117.52.84.88:8080/api/web/v1/getCommonCode";
+	let apiUrl = "http://117.52.84.88:8080/api/web/v1/regWrite";
 	let param = {
 		COMPANY_CD : company_cd,
 		DM_TYPE : dm_type,

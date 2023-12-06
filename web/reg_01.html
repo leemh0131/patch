@@ -128,50 +128,54 @@
 					<div class="group">
 						<p class="tit">피해종류</p>
 						<div class="inpt_wrap">
-							<select>
+							<select id="ES_Q0140">
+								<!--<option>불법대부업</option>
 								<option>불법대부업</option>
-								<option>불법대부업</option>
-								<option>불법대부업</option>
+								<option>불법대부업</option>-->
 							</select>
+						</div>
+					</div>
+					<div class="group">
+						<p class="tit">업체명</p>
+						<div class="inpt_wrap">
+							<input type="text" id="comp_nm" placeholder="업체명">
 						</div>
 					</div>
 					<div class="group">
 						<p class="tit">차용사이트</p>
 						<div class="inpt_wrap">
-							<input type="text" placeholder="차용사이트">
+							<input type="text" id="borw_site" placeholder="차용사이트">
 						</div>
 					</div>
 					<div class="group">
 						<p class="tit">연락처</p>
 						<div class="inpt_wrap">
-							<input type="text" placeholder="연락처">
+							<input type="text" id="debtor_tel" placeholder="연락처">
 						</div>
 					</div>
 					<div class="group">
 						<p class="tit">카카오톡</p>
 						<div class="inpt_wrap">
-							<input type="text" placeholder="카카오톡">
+							<input type="text" id="debtor_kakao" placeholder="카카오톡">
 						</div>
 					</div>
 					<div class="group">
 						<p class="tit">텔레그램</p>
 						<div class="inpt_wrap">
-							<input type="text" placeholder="텔레그램">
+							<input type="text" id="debtor_tele" placeholder="텔레그램">
 						</div>
 					</div>
 					<div class="group">
 						<p class="tit">기타SNS</p>
 						<div class="inpt_wrap">
-							<input type="text" placeholder="기타SNS">
+							<input type="text" id="debtor_sns" placeholder="기타SNS">
 						</div>
 					</div>
 					<div class="group">
 						<p class="tit">상환계좌</p>
 						<div class="inpt_wrap acc">
-							<select>
-								<option>은행명</option>
-								<option>은행명</option>
-								<option>은행명</option>
+							<select id="ES_Q0009">
+
 							</select>
 							<input type="text" class="acc_num" placeholder="계좌번호를 입력하세요.">
 							<input type="text" placeholder="입금자명">
@@ -192,20 +196,20 @@
 					<div class="group">
 						<p class="tit">고소한경찰서명</p>
 						<div class="inpt_wrap">
-							<input type="text" placeholder="고소한경찰서명">
+							<input type="text" id="compl_police" placeholder="고소한경찰서명">
 						</div>
 					</div>
 					<div class="group">
 						<p class="tit">피해종류</p>
 						<div class="inpt_wrap">
-							<textarea placeholder="직접 입력하세요."></textarea>
+							<textarea id="dm_contents" placeholder="직접 입력하세요."></textarea>
 						</div>
 					</div>
 				</div>
 
 				<!-- 버튼 -->
 				<div class="btn_wrap">
-					<a href="#" class="btn">
+					<a onclick="regWrite()" class="btn">
 						<span>등록하기</span>
 					</a>
 				</div>
@@ -407,3 +411,54 @@
 <!-- // WRAP -->
 </body>
 </html>
+
+<script>
+	//공통코드
+	let apiUrl = "http://117.52.84.88:8080/api/web/v1/getCommonCode";
+	let ES_Q0140 = {COMPANY_CD : "1000", FIELD_CD : "ES_Q0140"};
+	postData(apiUrl, ES_Q0140)
+			.then((res) => {
+				// 서버로부터 받은 데이터를 사용하여 원하는 작업을 수행
+				console.log('Received data:', res);
+				res = res.map;
+				$("#ES_Q0140").empty();
+
+				res.list.forEach((item) => {
+					// 각 항목마다 option 태그 생성 후 select에 추가
+					let option = `<option value="${item.CODE}">${item.NAME}</option>`;
+					$("#ES_Q0140").append(option);
+				});
+
+			})
+			.catch((err) => {
+				console.error('Error sending/receiving data:', err); // 데이터 전송 또는 수신 중 오류 발생 시 메시지 출력
+			});
+
+	let ES_Q0009 = {COMPANY_CD : "1000", FIELD_CD : "ES_Q0009"};
+	postData(apiUrl, ES_Q0009)
+			.then((res) => {
+				// 서버로부터 받은 데이터를 사용하여 원하는 작업을 수행
+				console.log('Received data:', res);
+				res = res.map;
+				$("#ES_Q0009").empty();
+
+				res.list.forEach((item) => {
+					// 각 항목마다 option 태그 생성 후 select에 추가
+					let option = `<option value="${item.CODE}">${item.NAME}</option>`;
+					$("#ES_Q0009").append(option);
+				});
+
+			})
+			.catch((err) => {
+				alert("네트워크 오류가 발생!!.");
+				console.error('Error sending/receiving data:', err); // 데이터 전송 또는 수신 중 오류 발생 시 메시지 출력
+			});
+
+	//dm_kind
+
+	//쓰기
+	function regWrite(){
+		commonRegWrite("001");
+	}
+
+</script>
