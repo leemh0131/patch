@@ -13,7 +13,80 @@
 	<script type="text/javascript" src="./assets/js/lib/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
 	<script type="text/javascript" src="./assets/js/common.js"></script>
-	<title>불법대부업 등록하기</title>
+	<title>실시간 불법대부업</title>
+	<script>
+		$(document).ready(function() {
+			let moreBtnCount = 0;
+			search();
+
+			$("#moreBtnCount").on("click", search);
+
+			function search() {
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMPaging', {DM_TYPE: "002", MORE_BTN_COUNT: moreBtnCount})
+				.then((res) => {
+					if (nvl(res.map.list, '') != '') {
+						list(res.map.list);
+					} else if(moreBtnCount != 1) {
+						alert("마지막 페이지 입니다.");
+					}
+				})
+				.catch((err) => {
+					alert("네트워크 오류가 발생!!.");
+					console.error('Error sending/receiving data:', err);
+				});
+				moreBtnCount++;
+			}
+
+			function list(slideData) {
+				var swiperWrapper = document.getElementById('user_list');
+
+				slideData.forEach(function (data) {
+					var slide = document.createElement('div');
+					slide.className = 'swiper-slide';
+
+					var item = document.createElement('div');
+					if (nvl(data.NEW_VALUE, '') == 'Y') {
+						item.className = 'item new';
+					} else {
+						item.className = 'item new2';
+					}
+
+					var name = document.createElement('p');
+					name.className = 'name';
+					name.textContent = data.COMP_NM;
+
+					var tel = document.createElement('p');
+					tel.className = 'tel';
+					tel.textContent = '연락처 : ' + data.DEBTOR_TEL;
+
+					var infoWrap = document.createElement('div');
+					infoWrap.className = 'info_wrap';
+
+					infoWrap.innerHTML = `
+					  <p>카카오톡 : <span>${data.DEBTOR_KAKAO}</span></p>
+					  <p>텔레그램 : <span>${data.DEBTOR_TELE}</span></p>
+					  <p>기타SNS : <span>${data.DEBTOR_SNS}</span></p>
+					`;
+
+					var btnWrap = document.createElement('div');
+					btnWrap.className = 'btn_wrap';
+
+					var btn = document.createElement('a');
+					btn.href = '#';
+					btn.className = 'btn';
+					btn.innerHTML = '<span>자세히보기</span>';
+
+					// Append elements to the DOM
+					btnWrap.appendChild(btn);
+					item.appendChild(name);
+					item.appendChild(tel);
+					item.appendChild(infoWrap);
+					item.appendChild(btnWrap);
+					swiperWrapper.appendChild(item);
+				})
+			}
+		});
+	</script>
 </head>
 <body>
 <!-- #WRAP -->
@@ -29,9 +102,9 @@
 
 			<nav>
 				<ul>
-					<li class="on"><a href="reg_01.html" title="피해등록하기"><span>피해등록하기</span></a></li>
+					<li><a href="reg_01.html" title="피해등록하기"><span>피해등록하기</span></a></li>
 					<li><a href="view_list.html" title="불법대부업"><span>불법대부업</span></a></li>
-					<li><a href="view_list_02.html" title="기타금융사기"><span>기타금융사기</span></a></li>
+					<li class="on"><a href="view_list_02.html" title="기타금융사기"><span>기타금융사기</span></a></li>
 					<li><a href="community_list.html" title="커뮤니티"><span>커뮤니티</span></a></li>
 					<li><a href="cs_list.html" title="법률상담문의"><span>법률상담문의</span></a></li>
 					<li><a href="job_list.html" title="일자리찾기"><span>일자리찾기</span></a></li>
@@ -87,8 +160,8 @@
 	<div class="sub_menu">
 		<div class="menu_slide swiper">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide on"><a href="reg_01.html" title="피해등록하기">피해등록하기</a></div>
-				<div class="swiper-slide"><a href="view_list.html" title="불법대부업">불법대부업</a></div>
+				<div class="swiper-slide "><a href="reg_01.html" title="피해등록하기">피해등록하기</a></div>
+				<div class="swiper-slide on"><a href="view_list.html" title="불법대부업">불법대부업</a></div>
 				<div class="swiper-slide "><a href="#" title="기타금융사기">기타금융사기</a></div>
 				<div class="swiper-slide "><a href="community_list.html" title="커뮤니티">커뮤니티</a></div>
 				<div class="swiper-slide "><a href="cs_list.html" title="법률상담문의">법률상담문의</a></div>
@@ -108,110 +181,48 @@
 							<a href="#" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
 						</li>
 						<li>
-							<a href="#"><span>피해등록하기</span></a>
+							<a href="#"><span>불법대부업</span></a>
 						</li>
 					</ul>
 				</div>
-				<div class="sub_tit_area tab_tit">
-					<h2>불법대부업 등록하기</h2>
-					<div class="sub_tab">
-						<ul>
-							<li class="on"><a href="reg_01.html" title="불법대부업 등록하기">불법대부업 등록하기</a></li>
-							<li><a href="reg_02.html" title="기타금융사기 등록하기">기타금융사기 등록하기</a></li>
-						</ul>
-					</div>
+				<div class="sub_tit_area">
+					<h2>기타금융사기</h2>
 				</div>
 
-				<div class="reg_form">
-					<!--<div class="group">
-						<p class="tit">피해종류</p>
-						<div class="inpt_wrap">
-							<select id="ES_Q0140">
-								&lt;!&ndash;<option>불법대부업</option>
-								<option>불법대부업</option>
-								<option>불법대부업</option>&ndash;&gt;
-							</select>
-						</div>
-					</div>-->
-					<div class="group">
-						<p class="tit">업체명</p>
-						<div class="inpt_wrap">
-							<input type="text" id="comp_nm" placeholder="업체명">
-						</div>
-					</div>
-					<div class="group">
-						<p class="tit">차용사이트</p>
-						<div class="inpt_wrap">
-							<input type="text" id="borw_site" placeholder="차용사이트">
-						</div>
-					</div>
-					<div class="group">
-						<p class="tit">연락처</p>
-						<div class="inpt_wrap">
-							<input type="text" id="debtor_tel" placeholder="연락처">
-						</div>
-					</div>
-					<div class="group">
-						<p class="tit">카카오톡</p>
-						<div class="inpt_wrap">
-							<input type="text" id="debtor_kakao" placeholder="카카오톡">
-						</div>
-					</div>
-					<div class="group">
-						<p class="tit">텔레그램</p>
-						<div class="inpt_wrap">
-							<input type="text" id="debtor_tele" placeholder="텔레그램">
-						</div>
-					</div>
-					<div class="group">
-						<p class="tit">기타SNS</p>
-						<div class="inpt_wrap">
-							<input type="text" id="debtor_sns" placeholder="기타SNS">
-						</div>
-					</div>
-					<div class="group">
-						<p class="tit">상환계좌</p>
-						<div class="inpt_wrap acc">
-							<select id="ES_Q0009">
+				<section class="list_sec">
+					<div class="user_list" id="user_list">
+						<!--<div class="item new">
+							<p class="name"> 마음대부 갑대리</p>
 
-							</select>
-							<input type="text" class="acc_num" placeholder="계좌번호를 입력하세요.">
-							<input type="text" placeholder="입금자명">
-							<div class="btn_wrap">
-								<button class="btn bg_bk"><span>추가</span></button>
+							<p class="tel">연락처 : <span>010-5986-8922</span></p>
+							<div class="info_wrap">
+								<p>
+									카카오톡 :
+									<span>모름</span>
+								</p>
+								<p>
+									텔레그램 :
+									<span>모름</span>
+								</p>
+								<p>
+									기타SNS :
+									<span>모름</span>
+								</p>
 							</div>
-						</div>
-					</div>
-					<div class="group">
-						<p class="tit">스마트출금위치</p>
-						<div class="inpt_wrap inpt_btn">
-							<input type="text" placeholder="스마트출금위치">
-							<div class="btn_wrap">
-								<button class="btn bg_bk"><span>추가</span></button>
-							</div>
-						</div>
-					</div>
-					<div class="group">
-						<p class="tit">고소한경찰서명</p>
-						<div class="inpt_wrap">
-							<input type="text" id="compl_police" placeholder="고소한경찰서명">
-						</div>
-					</div>
-					<div class="group">
-						<p class="tit">피해종류</p>
-						<div class="inpt_wrap">
-							<textarea id="dm_contents" placeholder="직접 입력하세요."></textarea>
-						</div>
-					</div>
-				</div>
 
-				<!-- 버튼 -->
+							<div class="btn_wrap">
+								<a href="#" class="btn">
+									<span>자세히보기</span>
+								</a>
+							</div>
+						</div>-->
+					</div>
+				</section>
 				<div class="btn_wrap">
-					<a onclick="regWrite()" class="btn">
-						<span>등록하기</span>
-					</a>
+					<button class="btn btn_more" id="moreBtnCount">
+						<span>더보기</span>
+					</button>
 				</div>
-				<!--// 버튼 -->
 			</div>
 
 			<!-- 사이드 메뉴 -->
@@ -409,54 +420,3 @@
 <!-- // WRAP -->
 </body>
 </html>
-
-<script>
-	//공통코드
-	/*let apiUrl = "http://117.52.84.88:8080/api/web/v1/getCommonCode";
-	let ES_Q0140 = {COMPANY_CD : "1000", FIELD_CD : "ES_Q0140"};
-	postData(apiUrl, ES_Q0140)
-			.then((res) => {
-				// 서버로부터 받은 데이터를 사용하여 원하는 작업을 수행
-				console.log('Received data:', res);
-				res = res.map;
-				$("#ES_Q0140").empty();
-
-				res.list.forEach((item) => {
-					// 각 항목마다 option 태그 생성 후 select에 추가
-					let option = `<option value="${item.CODE}">${item.NAME}</option>`;
-					$("#ES_Q0140").append(option);
-				});
-
-			})
-			.catch((err) => {
-				console.error('Error sending/receiving data:', err); // 데이터 전송 또는 수신 중 오류 발생 시 메시지 출력
-			});*/
-
-	let ES_Q0009 = {COMPANY_CD : "1000", FIELD_CD : "ES_Q0009"};
-	postData(apiUrl, ES_Q0009)
-			.then((res) => {
-				// 서버로부터 받은 데이터를 사용하여 원하는 작업을 수행
-				console.log('Received data:', res);
-				res = res.map;
-				$("#ES_Q0009").empty();
-
-				res.list.forEach((item) => {
-					// 각 항목마다 option 태그 생성 후 select에 추가
-					let option = `<option value="${item.CODE}">${item.NAME}</option>`;
-					$("#ES_Q0009").append(option);
-				});
-
-			})
-			.catch((err) => {
-				alert("네트워크 오류가 발생!!.");
-				console.error('Error sending/receiving data:', err); // 데이터 전송 또는 수신 중 오류 발생 시 메시지 출력
-			});
-
-	//dm_kind
-
-	//쓰기
-	function regWrite(){
-		commonRegWrite("001");
-	}
-
-</script>

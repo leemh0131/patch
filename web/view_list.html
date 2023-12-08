@@ -14,6 +14,78 @@
 	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
 	<script type="text/javascript" src="./assets/js/common.js"></script>
 	<title>실시간 불법대부업</title>
+	<script>
+		$(document).ready(function() {
+			let moreBtnCount = 0;
+			search();
+
+			$("#moreBtnCount").on("click", search);
+
+			function search() {
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMPaging', {DM_TYPE: "001", MORE_BTN_COUNT: moreBtnCount})
+				.then((res) => {
+					if (nvl(res.map.list, '') != '') {
+						list(res.map.list);
+					} else {
+						alert("마지막 페이지 입니다.");
+					}
+				})
+				.catch((err) => {
+					alert("네트워크 오류가 발생!!.");
+				});
+				moreBtnCount++;
+			}
+
+			function list(slideData) {
+				var swiperWrapper = document.getElementById('user_list');
+
+				slideData.forEach(function (data) {
+					var slide = document.createElement('div');
+					slide.className = 'swiper-slide';
+
+					var item = document.createElement('div');
+					if (nvl(data.NEW_VALUE, '') == 'Y') {
+						item.className = 'item new';
+					} else {
+						item.className = 'item new2';
+					}
+
+					var name = document.createElement('p');
+					name.className = 'name';
+					name.textContent = data.COMP_NM;
+
+					var tel = document.createElement('p');
+					tel.className = 'tel';
+					tel.textContent = '연락처 : ' + data.DEBTOR_TEL;
+
+					var infoWrap = document.createElement('div');
+					infoWrap.className = 'info_wrap';
+
+					infoWrap.innerHTML = `
+					  <p>카카오톡 : <span>${data.DEBTOR_KAKAO}</span></p>
+					  <p>텔레그램 : <span>${data.DEBTOR_TELE}</span></p>
+					  <p>기타SNS : <span>${data.DEBTOR_SNS}</span></p>
+					`;
+
+					var btnWrap = document.createElement('div');
+					btnWrap.className = 'btn_wrap';
+
+					var btn = document.createElement('a');
+					btn.href = '#';
+					btn.className = 'btn';
+					btn.innerHTML = '<span>자세히보기</span>';
+
+					// Append elements to the DOM
+					btnWrap.appendChild(btn);
+					item.appendChild(name);
+					item.appendChild(tel);
+					item.appendChild(infoWrap);
+					item.appendChild(btnWrap);
+					swiperWrapper.appendChild(item);
+				})
+			}
+		});
+	</script>
 </head>
 <body>
 <!-- #WRAP -->
@@ -31,7 +103,7 @@
 				<ul>
 					<li><a href="reg_01.html" title="피해등록하기"><span>피해등록하기</span></a></li>
 					<li class="on"><a href="view_list.html" title="불법대부업"><span>불법대부업</span></a></li>
-					<li><a href="#" title="기타금융사기"><span>기타금융사기</span></a></li>
+					<li><a href="view_list_02.html" title="기타금융사기"><span>기타금융사기</span></a></li>
 					<li><a href="community_list.html" title="커뮤니티"><span>커뮤니티</span></a></li>
 					<li><a href="cs_list.html" title="법률상담문의"><span>법률상담문의</span></a></li>
 					<li><a href="job_list.html" title="일자리찾기"><span>일자리찾기</span></a></li>
@@ -117,8 +189,8 @@
 				</div>
 
 				<section class="list_sec">
-					<div class="user_list">
-						<div class="item new">
+					<div class="user_list" id="user_list">
+						<!--<div class="item new">
 							<p class="name"> 마음대부 갑대리</p>
 
 							<p class="tel">연락처 : <span>010-5986-8922</span></p>
@@ -142,286 +214,11 @@
 									<span>자세히보기</span>
 								</a>
 							</div>
-						</div>
-						<div class="item new">
-							<p class="name"> 마음대부 갑대리</p>
-
-							<p class="tel">연락처 : <span>010-5986-8922</span></p>
-							<div class="info_wrap">
-								<p>
-									카카오톡 :
-									<span>모름</span>
-								</p>
-								<p>
-									텔레그램 :
-									<span>모름</span>
-								</p>
-								<p>
-									기타SNS :
-									<span>모름</span>
-								</p>
-							</div>
-
-							<div class="btn_wrap">
-								<a href="#" class="btn">
-									<span>자세히보기</span>
-								</a>
-							</div>
-						</div>
-						<div class="item new">
-							<p class="name"> 마음대부 갑대리</p>
-
-							<p class="tel">연락처 : <span>010-5986-8922</span></p>
-							<div class="info_wrap">
-								<p>
-									카카오톡 :
-									<span>모름</span>
-								</p>
-								<p>
-									텔레그램 :
-									<span>모름</span>
-								</p>
-								<p>
-									기타SNS :
-									<span>모름</span>
-								</p>
-							</div>
-
-							<div class="btn_wrap">
-								<a href="#" class="btn">
-									<span>자세히보기</span>
-								</a>
-							</div>
-						</div>
-						<div class="item new">
-							<p class="name"> 마음대부 갑대리</p>
-
-							<p class="tel">연락처 : <span>010-5986-8922</span></p>
-							<div class="info_wrap">
-								<p>
-									카카오톡 :
-									<span>모름</span>
-								</p>
-								<p>
-									텔레그램 :
-									<span>모름</span>
-								</p>
-								<p>
-									기타SNS :
-									<span>모름</span>
-								</p>
-							</div>
-
-							<div class="btn_wrap">
-								<a href="#" class="btn">
-									<span>자세히보기</span>
-								</a>
-							</div>
-						</div>
-						<div class="item new">
-							<p class="name"> 마음대부 갑대리</p>
-
-							<p class="tel">연락처 : <span>010-5986-8922</span></p>
-							<div class="info_wrap">
-								<p>
-									카카오톡 :
-									<span>모름</span>
-								</p>
-								<p>
-									텔레그램 :
-									<span>모름</span>
-								</p>
-								<p>
-									기타SNS :
-									<span>모름</span>
-								</p>
-							</div>
-
-							<div class="btn_wrap">
-								<a href="#" class="btn">
-									<span>자세히보기</span>
-								</a>
-							</div>
-						</div>
-						<div class="item new">
-							<p class="name"> 마음대부 갑대리</p>
-
-							<p class="tel">연락처 : <span>010-5986-8922</span></p>
-							<div class="info_wrap">
-								<p>
-									카카오톡 :
-									<span>모름</span>
-								</p>
-								<p>
-									텔레그램 :
-									<span>모름</span>
-								</p>
-								<p>
-									기타SNS :
-									<span>모름</span>
-								</p>
-							</div>
-
-							<div class="btn_wrap">
-								<a href="#" class="btn">
-									<span>자세히보기</span>
-								</a>
-							</div>
-						</div>
-						<div class="item new">
-							<p class="name"> 마음대부 갑대리</p>
-
-							<p class="tel">연락처 : <span>010-5986-8922</span></p>
-							<div class="info_wrap">
-								<p>
-									카카오톡 :
-									<span>모름</span>
-								</p>
-								<p>
-									텔레그램 :
-									<span>모름</span>
-								</p>
-								<p>
-									기타SNS :
-									<span>모름</span>
-								</p>
-							</div>
-
-							<div class="btn_wrap">
-								<a href="#" class="btn">
-									<span>자세히보기</span>
-								</a>
-							</div>
-						</div>
-						<div class="item new">
-							<p class="name"> 마음대부 갑대리</p>
-
-							<p class="tel">연락처 : <span>010-5986-8922</span></p>
-							<div class="info_wrap">
-								<p>
-									카카오톡 :
-									<span>모름</span>
-								</p>
-								<p>
-									텔레그램 :
-									<span>모름</span>
-								</p>
-								<p>
-									기타SNS :
-									<span>모름</span>
-								</p>
-							</div>
-
-							<div class="btn_wrap">
-								<a href="#" class="btn">
-									<span>자세히보기</span>
-								</a>
-							</div>
-						</div>
-						<div class="item new">
-							<p class="name"> 마음대부 갑대리</p>
-
-							<p class="tel">연락처 : <span>010-5986-8922</span></p>
-							<div class="info_wrap">
-								<p>
-									카카오톡 :
-									<span>모름</span>
-								</p>
-								<p>
-									텔레그램 :
-									<span>모름</span>
-								</p>
-								<p>
-									기타SNS :
-									<span>모름</span>
-								</p>
-							</div>
-
-							<div class="btn_wrap">
-								<a href="#" class="btn">
-									<span>자세히보기</span>
-								</a>
-							</div>
-						</div>
-						<div class="item new">
-							<p class="name"> 마음대부 갑대리</p>
-
-							<p class="tel">연락처 : <span>010-5986-8922</span></p>
-							<div class="info_wrap">
-								<p>
-									카카오톡 :
-									<span>모름</span>
-								</p>
-								<p>
-									텔레그램 :
-									<span>모름</span>
-								</p>
-								<p>
-									기타SNS :
-									<span>모름</span>
-								</p>
-							</div>
-
-							<div class="btn_wrap">
-								<a href="#" class="btn">
-									<span>자세히보기</span>
-								</a>
-							</div>
-						</div>
-						<div class="item new">
-							<p class="name"> 마음대부 갑대리</p>
-
-							<p class="tel">연락처 : <span>010-5986-8922</span></p>
-							<div class="info_wrap">
-								<p>
-									카카오톡 :
-									<span>모름</span>
-								</p>
-								<p>
-									텔레그램 :
-									<span>모름</span>
-								</p>
-								<p>
-									기타SNS :
-									<span>모름</span>
-								</p>
-							</div>
-
-							<div class="btn_wrap">
-								<a href="#" class="btn">
-									<span>자세히보기</span>
-								</a>
-							</div>
-						</div>
-						<div class="item new">
-							<p class="name"> 마음대부 갑대리</p>
-
-							<p class="tel">연락처 : <span>010-5986-8922</span></p>
-							<div class="info_wrap">
-								<p>
-									카카오톡 :
-									<span>모름</span>
-								</p>
-								<p>
-									텔레그램 :
-									<span>모름</span>
-								</p>
-								<p>
-									기타SNS :
-									<span>모름</span>
-								</p>
-							</div>
-
-							<div class="btn_wrap">
-								<a href="#" class="btn">
-									<span>자세히보기</span>
-								</a>
-							</div>
-						</div>
+						</div>-->
 					</div>
 				</section>
 				<div class="btn_wrap">
-					<button class="btn btn_more">
+					<button class="btn btn_more" id="moreBtnCount">
 						<span>더보기</span>
 					</button>
 				</div>
