@@ -22,17 +22,16 @@
 			$("#moreBtnCount").on("click", search);
 
 			function search() {
-				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMPaging', {DM_TYPE: "002", MORE_BTN_COUNT: moreBtnCount})
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMPaging', {DM_TYPE: "001", MORE_BTN_COUNT: moreBtnCount})
 				.then((res) => {
 					if (nvl(res.map.list, '') != '') {
 						list(res.map.list);
-					} else if(moreBtnCount != 1) {
+					} else {
 						alert("마지막 페이지 입니다.");
 					}
 				})
 				.catch((err) => {
 					alert("네트워크 오류가 발생!!.");
-					console.error('Error sending/receiving data:', err);
 				});
 				moreBtnCount++;
 			}
@@ -117,16 +116,41 @@
 							<a href="#" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
 						</li>
 						<li>
-							<a href="#"><span>기타금융사기</span></a>
+							<a href="#"><span>불법대부업</span></a>
 						</li>
 					</ul>
 				</div>
 				<div class="sub_tit_area">
-					<h2>기타금융사기</h2>
+					<h2>실시간 불법대부업</h2>
 				</div>
 
 				<section class="list_sec">
 					<div class="user_list" id="user_list">
+						<!--<div class="item new">
+							<p class="name"> 마음대부 갑대리</p>
+
+							<p class="tel">연락처 : <span>010-5986-8922</span></p>
+							<div class="info_wrap">
+								<p>
+									카카오톡 :
+									<span>모름</span>
+								</p>
+								<p>
+									텔레그램 :
+									<span>모름</span>
+								</p>
+								<p>
+									기타SNS :
+									<span>모름</span>
+								</p>
+							</div>
+
+							<div class="btn_wrap">
+								<a href="#" class="btn">
+									<span>자세히보기</span>
+								</a>
+							</div>
+						</div>-->
 					</div>
 				</section>
 				<div class="btn_wrap">

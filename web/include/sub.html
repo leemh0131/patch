@@ -1,0 +1,160 @@
+<script>
+  $(document).ready(function() {
+    $("#srch_btn").on("click", srchBtn);
+
+    function srchBtn() {
+      location.href = '/patch/web/view_list_03.html?dmType=' + $("#dm_type option:selected").val() + "&srchKeyword=" + $('#srch_keyword').val();
+    }
+  });
+</script>
+
+  <!-- 검색 -->
+  <div class="group">
+    <div class="tit_area">
+      <h3 class="tit">불법대부업 및 금융사기 검색</h3>
+    </div>
+
+    <!-- 검색 input -->
+    <div class="srch">
+      <select id="dm_type">
+        <option value=""></option>
+        <option value="001">불법대부업</option>
+        <option value="002">금융사기</option>
+      </select>
+    </div>
+    <div class="srch">
+      <input type="text" id="srch_keyword" onkeydown="javascript:if(event.keyCode == 13) document.getElementById('srch_btn').click();" placeholder="불법사채업자를 검색하세요.">
+      <button type="submit" id="srch_btn"><span class="blind">검색</span></button>
+    </div>
+    <!--// 검색 input -->
+  </div>
+  <!--// 검색 -->
+
+  <!-- 실시간 댓글 -->
+  <div class="group">
+    <div class="tit_area">
+      <h3 class="tit">실시간 댓글</h3>
+    </div>
+
+    <div class="snb_box reply">
+      <ul>
+        <li class="new">
+          <a href="#">
+            <strong>마음**</strong>
+            <p>텍스트가 길어질 경우 텍스트가 길어질 경우 텍스트가 길어질 경우</p>
+          </a>
+        </li>
+        <li class="new">
+          <a href="#">
+            <strong>남**</strong>
+            <p>이업자 쓰지마세요 제발</p>
+          </a>
+        </li>
+        <li class="new">
+          <a href="#">
+            <strong>남**</strong>
+            <p>잡힌것 같은데요????</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--// 실시간 댓글 -->
+
+  <!-- 공지사항 -->
+  <div class="group">
+    <div class="tit_area">
+      <h3 class="tit">공지사항</h3>
+      <a href="#" class="more">더보기</a>
+    </div>
+
+    <div class="snb_box noti">
+      <ul>
+        <li class="new">
+          <a href="#">
+            <p>텍스트가 길어질 경우 텍스트가 길어질 경우 텍스트가 길어질 경우</p>
+            <span>2023-10-30</span>
+          </a>
+        </li>
+        <li class="new">
+          <a href="#">
+            <p>이업자 쓰지마세요 제발</p>
+            <span>2023-10-30</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <p>잡힌것 같은데요????</p>
+            <span>2023-10-30</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <p>잡힌것 같은데요????</p>
+            <span>2023-10-30</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--// 공지사항 -->
+
+  <!-- 커뮤니티 -->
+  <div class="group">
+    <div class="tit_area">
+      <h3 class="tit">커뮤니티</h3>
+      <a href="#" class="more">더보기</a>
+    </div>
+
+    <div class="snb_box noti">
+      <ul>
+        <li class="new">
+          <a href="#">
+            <p>텍스트가 길어질 경우 텍스트가 길어질 경우 텍스트가 길어질 경우</p>
+            <span>2023-10-30</span>
+          </a>
+        </li>
+        <li class="new">
+          <a href="#">
+            <p>이업자 쓰지마세요 제발</p>
+            <span>2023-10-30</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <p>잡힌것 같은데요????</p>
+            <span>2023-10-30</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <p>잡힌것 같은데요????</p>
+            <span>2023-10-30</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--// 커뮤니티 -->
+
+  <!-- 광고영역 -->
+  <div class="group">
+    <div class="tit_area">
+      <h3 class="tit">광고영역</h3>
+      <span class="ad">AD</span>
+    </div>
+
+    <div class="ad_wrap">
+      <a href="#">
+        <figure class="img">
+          <img src="assets/images/bg_ad.png" alt="AD">
+        </figure>
+        <div class="txt_wrap">
+          <p class="name">가법률사무소</p>
+          <p class="txt">광주/목포/순천/여수/전주/군산에서 활동하는<br>경력의 베테랑 사무소</p>
+          <p class="tel">010-2571-3457</p>
+        </div>
+      </a>
+    </div>
+  </div>
+  <!--// 광고영역 -->

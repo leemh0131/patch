@@ -5,6 +5,12 @@ $(document).ready(function(){
 	$('.loc_tab').length && mapTab();
 	$('.menu_slide').length && menuSlide();
 	$('.ctrl_trg').length && csList();
+	$("#header").load("/include/header.html");
+	$("#footer").load("/include/footer.html");
+	$("#sub").load("/include/sub.html");
+	$("#sub_menu").load("/include/sub_menu.html");
+	$("#m_gnb_wrap").load("/include/m_gnb_wrap.html");
+	$("#site_srch_wrap").load("/include/site_srch_wrap.html");
 });
 
 function dimShow(){ /* 딤드 show */
@@ -351,7 +357,7 @@ function commonRegWrite(dm_type){
 			res = res.map;
 			if(res.response == 'ok'){
 				alert("등록이 완료되었습니다.");
-				location.href = '/view_list.html';
+				location.href = '/view_list_01.html';
 			}
 
 

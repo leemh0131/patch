@@ -16,13 +16,22 @@
 	<title>실시간 불법대부업</title>
 	<script>
 		$(document).ready(function() {
+			let urlParams = new URLSearchParams(location.search);
+
+			let dmType = nvl(urlParams.get('dmType'));
+			let srchKeyword = nvl(urlParams.get('srchKeyword'));
+
+			// $("#dm_type").val(dmType).prop("selected", true);
+			// $("#srch_keyword").val(srchKeyword);
+//여기 바인딩이 안되네
+
 			let moreBtnCount = 0;
 			search();
 
 			$("#moreBtnCount").on("click", search);
 
 			function search() {
-				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMPaging', {DM_TYPE: "002", MORE_BTN_COUNT: moreBtnCount})
+				postData('http://localhost:8080/api/web/v1/getPrivateLoanPlDmMPaging', {DM_TYPE: dmType, KEYWORD: srchKeyword, MORE_BTN_COUNT: moreBtnCount})
 				.then((res) => {
 					if (nvl(res.map.list, '') != '') {
 						list(res.map.list);
@@ -117,12 +126,12 @@
 							<a href="#" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
 						</li>
 						<li>
-							<a href="#"><span>기타금융사기</span></a>
+							<a href="#"><span>불법대부업 및 금융사기 검색</span></a>
 						</li>
 					</ul>
 				</div>
 				<div class="sub_tit_area">
-					<h2>기타금융사기</h2>
+					<h2>불법대부업 및 금융사기</h2>
 				</div>
 
 				<section class="list_sec">
