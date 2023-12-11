@@ -1,5 +1,21 @@
 <script>
   $(document).ready(function() {
+    postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanSubInfo', {SIDO: $("#ES_Q0009 option:selected").val(), KEYWORD: $('#police_srch_keyword').val()})
+    .then((res) => {
+      /*if (nvl(res.map.list1, '') != '') {
+        list(res.map.list1, 'live_comment');
+      }*/
+      if (nvl(res.map.list2, '') != '') {
+        list(res.map.list2, 'board');
+      }
+      if (nvl(res.map.list3, '') != '') {
+        list(res.map.list3, 'community');
+      }
+    })
+    .catch((err) => {
+      alert("네트워크 오류가 발생!!.");
+    });
+
     let urlParams = new URLSearchParams(location.search);
 
     let dmType = nvl(urlParams.get('dmType'));
@@ -12,6 +28,29 @@
 
     function srchBtn() {
       location.href = '/patch/web/view_list_03.html?dmType=' + $("#dm_type option:selected").val() + "&srchKeyword=" + $('#srch_keyword').val();
+    }
+
+
+    function list(list, btnId) {
+      var ulElement = document.getElementById(btnId);
+      list.forEach(function (item) {
+
+        var liElement = document.createElement('li');
+        var aElement = document.createElement('a');
+        var pElement = document.createElement('p');
+        var spanElement = document.createElement('span');
+
+        pElement.textContent = item.TITLE;
+        spanElement.textContent = item.DTS;
+
+        aElement.appendChild(pElement);
+        aElement.appendChild(spanElement);
+        // aElement.href = '#';
+
+        liElement.appendChild(aElement);
+        ulElement.appendChild(liElement);
+
+      })
     }
   });
 </script>
@@ -45,25 +84,7 @@
     </div>
 
     <div class="snb_box reply">
-      <ul>
-        <li class="new">
-          <a href="#">
-            <strong>마음**</strong>
-            <p>텍스트가 길어질 경우 텍스트가 길어질 경우 텍스트가 길어질 경우</p>
-          </a>
-        </li>
-        <li class="new">
-          <a href="#">
-            <strong>남**</strong>
-            <p>이업자 쓰지마세요 제발</p>
-          </a>
-        </li>
-        <li class="new">
-          <a href="#">
-            <strong>남**</strong>
-            <p>잡힌것 같은데요????</p>
-          </a>
-        </li>
+      <ul id="live_comment">
       </ul>
     </div>
   </div>
@@ -73,35 +94,11 @@
   <div class="group">
     <div class="tit_area">
       <h3 class="tit">공지사항</h3>
-      <a href="#" class="more">더보기</a>
+      <a href="/patch/web/cs_01.html" class="more">더보기</a>
     </div>
 
     <div class="snb_box noti">
-      <ul>
-        <li class="new">
-          <a href="#">
-            <p>텍스트가 길어질 경우 텍스트가 길어질 경우 텍스트가 길어질 경우</p>
-            <span>2023-10-30</span>
-          </a>
-        </li>
-        <li class="new">
-          <a href="#">
-            <p>이업자 쓰지마세요 제발</p>
-            <span>2023-10-30</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <p>잡힌것 같은데요????</p>
-            <span>2023-10-30</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <p>잡힌것 같은데요????</p>
-            <span>2023-10-30</span>
-          </a>
-        </li>
+      <ul id="board">
       </ul>
     </div>
   </div>
@@ -111,35 +108,11 @@
   <div class="group">
     <div class="tit_area">
       <h3 class="tit">커뮤니티</h3>
-      <a href="#" class="more">더보기</a>
+      <a href="./community_list.html" class="more">더보기</a>
     </div>
 
     <div class="snb_box noti">
-      <ul>
-        <li class="new">
-          <a href="#">
-            <p>텍스트가 길어질 경우 텍스트가 길어질 경우 텍스트가 길어질 경우</p>
-            <span>2023-10-30</span>
-          </a>
-        </li>
-        <li class="new">
-          <a href="#">
-            <p>이업자 쓰지마세요 제발</p>
-            <span>2023-10-30</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <p>잡힌것 같은데요????</p>
-            <span>2023-10-30</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <p>잡힌것 같은데요????</p>
-            <span>2023-10-30</span>
-          </a>
-        </li>
+      <ul id="community">
       </ul>
     </div>
   </div>

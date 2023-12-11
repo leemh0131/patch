@@ -19,7 +19,7 @@
 			let moreBtnCount = 0;
 			search();
 
-			$("#moreBtnCount").on("click", search);
+			$("#moreBtn").on("click", search);
 
 			function search() {
 				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMPaging', {DM_TYPE: "002", MORE_BTN_COUNT: moreBtnCount})
@@ -114,10 +114,10 @@
 				<div class="location">
 					<ul>
 						<li>
-							<a href="#" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
+							<a href="/patch/web/main.html" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
 						</li>
 						<li>
-							<a href="#"><span>기타금융사기</span></a>
+							<a href="/patch/web/view_list_02.html"><span>기타금융사기</span></a>
 						</li>
 					</ul>
 				</div>
@@ -130,7 +130,7 @@
 					</div>
 				</section>
 				<div class="btn_wrap">
-					<button class="btn btn_more" id="moreBtnCount">
+					<button class="btn btn_more" id="moreBtn">
 						<span>더보기</span>
 					</button>
 				</div>

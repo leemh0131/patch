@@ -19,7 +19,7 @@
 			$("#police_srch_btn").on("click", policeSrchBtn);
 
 			function policeSrchBtn() {
-				postData('http://localhost:8080/api/web/v1/getPrivateLoanInfoPolice', {SIDO: $("#ES_Q0009 option:selected").val(), KEYWORD: $('#police_srch_keyword').val()})
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanInfoPolice', {SIDO: $("#ES_Q0009 option:selected").val(), KEYWORD: $('#police_srch_keyword').val()})
 				.then((res) => {
 					$("#polices").empty();
 					if (nvl(res.map.list, '') != '') {
@@ -30,7 +30,7 @@
 					alert("네트워크 오류가 발생!!.");
 				});
 			}
-			postData('http://localhost:8080/api/web/v1/getPrivateLoanMain', {})
+			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanMain', {})
 			.then((res) => {
 				if (nvl(res.map.list1, '') != '') {
 					list1(1, res.map.list1);

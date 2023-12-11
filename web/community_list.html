@@ -14,6 +14,64 @@
 	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
 	<script type="text/javascript" src="./assets/js/common.js"></script>
 	<title>커뮤니티</title>
+	<script>
+		$(document).ready(function() {
+			let moreBtnCount = 0;
+			search();
+
+			$("#moreBtn").on("click", search);
+
+			function search() {
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanCommunityPaging', {MORE_BTN_COUNT: moreBtnCount})
+				.then((res) => {
+					if (nvl(res.map.list, '') != '') {
+						list(res.map.list);
+					} else {
+						alert("마지막 페이지 입니다.");
+					}
+				})
+				.catch((err) => {
+					alert("네트워크 오류가 발생!!.");
+				});
+				moreBtnCount++;
+			}
+
+			function list(slideData) {
+				var commList = document.getElementById('comm_list');
+
+				slideData.forEach(function (data) {
+					var liElement = document.createElement('li');
+
+					var seqDivElement = document.createElement('div');
+					seqDivElement.className = 'comm_num';
+					seqDivElement.textContent = data.SEQ;
+
+					var titDivElement = document.createElement('div');
+					titDivElement.className = 'comm_tit';
+
+					var aElement = document.createElement('a');
+					aElement.href = '#'
+					aElement.title = data.TITLE;
+					aElement.textContent = data.TITLE;
+
+					var authorDivElement = document.createElement('div');
+					authorDivElement.className = 'comm_author';
+					authorDivElement.textContent = data.NAME;
+
+					var dateDivElement = document.createElement('div');
+					dateDivElement.className = 'comm_date';
+					dateDivElement.textContent = data.DTS;
+
+					liElement.appendChild(seqDivElement);
+					titDivElement.appendChild(aElement);
+					liElement.appendChild(titDivElement);
+					liElement.appendChild(authorDivElement);
+					liElement.appendChild(dateDivElement);
+					commList.appendChild(liElement);
+				})
+			}
+		});
+	</script>
 </head>
 <body>
 <!-- #WRAP -->
@@ -41,10 +99,10 @@
 				<div class="location">
 					<ul>
 						<li>
-							<a href="#" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
+							<a href="/patch/web/main.html" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
 						</li>
 						<li>
-							<a href="#"><span>커뮤니티</span></a>
+							<a href="/patch/web/community_list.html"><span>커뮤니티</span></a>
 						</li>
 					</ul>
 				</div>
@@ -56,213 +114,13 @@
 				<div class="comm_list_wrap">
 
 					<!-- 커뮤니티 리스트 -->
-					<ul class="comm_list">
-						<li>
-							<div class="comm_num">888</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다. OOOO에게 피해를 당했습니다. OOOO에게 피해를 당했습니다. OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
-						<li>
-							<div class="comm_num">10</div>
-							<div class="comm_tit">
-								<a href="community_view.html" title="OOOO에게 피해를 당했습니다.">
-									OOOO에게 피해를 당했습니다.
-								</a>
-							</div>
-							<div class="comm_author">김OO</div>
-							<div class="comm_date">2023-08-27</div>
-						</li>
+					<ul class="comm_list" id="comm_list">
 					</ul>
 					<!-- // 커뮤니티 리스트 -->
 
 					<!-- 버튼 -->
 					<div class="btn_wrap">
-						<button class="btn btn_more">
+						<button class="btn btn_more" id="moreBtn">
 							<span>더보기</span>
 						</button>
 						<a href="#" class="btn">

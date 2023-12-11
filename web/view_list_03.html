@@ -24,10 +24,10 @@
 			let moreBtnCount = 0;
 			search();
 
-			$("#moreBtnCount").on("click", search);
+			$("#moreBtn").on("click", search);
 
 			function search() {
-				postData('http://localhost:8080/api/web/v1/getPrivateLoanPlDmMPaging', {DM_TYPE: dmType, KEYWORD: srchKeyword, MORE_BTN_COUNT: moreBtnCount})
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMPaging', {DM_TYPE: dmType, KEYWORD: srchKeyword, MORE_BTN_COUNT: moreBtnCount})
 				.then((res) => {
 					if (nvl(res.map.list, '') != '') {
 						list(res.map.list);
@@ -135,7 +135,7 @@
 					</div>
 				</section>
 				<div class="btn_wrap">
-					<button class="btn btn_more" id="moreBtnCount">
+					<button class="btn btn_more" id="moreBtn">
 						<span>더보기</span>
 					</button>
 				</div>
