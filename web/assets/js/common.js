@@ -4,13 +4,29 @@ $(document).ready(function(){
 	$('.main_user_slide').length && mainUserSlide();
 	$('.loc_tab').length && mapTab();
 	$('.menu_slide').length && menuSlide();
-	$('.ctrl_trg').length && csList();
+	//$('.ctrl_trg').length && csList();
 	$("#header").load("/include/header.html");
 	$("#footer").load("/include/footer.html");
 	$("#sub").load("/include/sub.html");
 	$("#sub_menu").load("/include/sub_menu.html");
 	$("#m_gnb_wrap").load("/include/m_gnb_wrap.html");
 	$("#site_srch_wrap").load("/include/site_srch_wrap.html");
+
+	$('#list').on('click', '.ctrl_trg', function(e) {
+		e.preventDefault();
+		var $parentLi = $(this).parent();
+
+		if ($parentLi.hasClass('on')) {
+			$parentLi.removeClass('on');
+			$(this).siblings().stop().slideUp();
+		} else {
+			$('.cs_wrap ul li').removeClass('on');
+			$parentLi.addClass('on');
+			$('.ans_wrap').stop().slideUp();
+			$(this).siblings().stop().slideDown();
+		}
+	});
+
 });
 
 function dimShow(){ /* 딤드 show */
@@ -205,9 +221,10 @@ function muCenter(target, num, type) { //탭 가운데 이동
 	});
 }
 
-function csList(){ //고객센터
+/*function csList(){ //고객센터
 	$('.ctrl_trg').on('click', function(e){
 		e.preventDefault();
+		debugger
 		if($(this).parent().hasClass('on')){
 			$(this).parent().removeClass('on')
 			$(this).siblings().stop().slideUp();
@@ -219,7 +236,7 @@ function csList(){ //고객센터
 		}
 	})
 
-}
+}*/
 
 function postData2(url, param) {
 
@@ -329,12 +346,41 @@ function commonRegWrite(dm_type){
 	let debtor_sns = nvl($("#debtor_sns").val()); 		//기타sns
 	let compl_police = nvl($("#compl_police").val()); 	//고소한경찰서명
 	let dm_contents = nvl($("#dm_contents").val()); 	//피해종류
+	let pw = nvl($("#pw").val()); 	//피해종류
 	let use_yn = "Y";
 
-	//let dm_kind = "; //계좌
-	//let dm_kind = "; //스마트출금위치
+
 	//let apiUrl = "http://localhost:8080/api/web/v1/regWrite";
+
+
 	let apiUrl = "http://117.52.84.88:8080/api/web/v1/regWrite";
+
+	let depositList = [];
+	$('.acc').each(function(index) {
+		var inputs = $(this).find('input');
+		var selects = $(this).find('select');
+
+		var values = {};
+		inputs.each(function() {
+			var inputName = $(this).attr('name');
+			var inputValue = $(this).val();
+			values[inputName] = inputValue;
+		});
+
+		selects.each(function() {
+			var selectName = $(this).attr('name');
+			var selectedOption = $(this).find('option:selected');
+			var selectedValue = selectedOption.val();
+			var selectedText = selectedOption.text();
+			values['BANK_CD'] = selectedValue;
+			values['BANK_NM'] = selectedText;
+		});
+		values['USE_YN'] = 'Y';
+		depositList.push(values);
+	});
+
+	depositList.splice(0, 1);
+
 	let param = {
 		COMPANY_CD : company_cd,
 		DM_TYPE : dm_type,
@@ -348,6 +394,8 @@ function commonRegWrite(dm_type){
 		COMPL_POLICE : compl_police,
 		DM_CONTENTS : dm_contents,
 		USE_YN : use_yn,
+		DEPOSIT : depositList,
+		PW : pw,
 	}
 
 	postData(apiUrl, param)
@@ -366,4 +414,70 @@ function commonRegWrite(dm_type){
 			alert("네트워크 오류가 발생!!.");
 			console.error('Error sending/receiving data:', err); // 데이터 전송 또는 수신 중 오류 발생 시 메시지 출력
 		});
+}
+
+function depositAdd(){
+
+	if(nvl($('#no_deposit').val()) == '' || nvl($('#nm_depositor').val()) == '' ){
+		alert("계좌번호 및 입금자명를 입력하세요.");
+		return
+	}
+
+	const selectedOption = $('#ES_Q0009').find('option:selected').val();
+
+	const newDiv = $('<div>')
+		.addClass('inpt_wrap acc')
+		.css('margin-top', '1px');
+
+	const selectElement = $('<select>');
+	const option = $('<option selected value="' + $('#ES_Q0009').find('option:selected').val() + '">' + $('#ES_Q0009').find('option:selected').text()  + '</option>>');
+	selectElement.append(option);
+	newDiv.append(selectElement);
+
+
+	const accNumInput = $('<input>')
+		.attr('type', 'text')
+		.attr('name', 'NO_DEPOSIT')
+		.attr('readonly', 'readonly')
+		.addClass('acc_num')
+		.val($('#no_deposit').val())
+		.attr('placeholder', '계좌번호를 입력하세요.');
+	newDiv.append(accNumInput);
+
+	const depositorInput = $('<input>')
+		.attr('type', 'text')
+		.attr('name', 'NM_DEPOSITOR')
+		.attr('readonly', 'readonly')
+		.attr('placeholder', '입금자명')
+		.val(nvl($('#nm_depositor').val()));
+	newDiv.append(depositorInput);
+
+	const btnWrapDiv = $('<div>')
+		.addClass('btn_wrap');
+
+	const deleteButton = $('<button>')
+		.addClass('btn bg_bk')
+		.append('<span>삭제</span>')
+		.on('click', function() {
+			depositDel(this);
+		});
+	btnWrapDiv.append(deleteButton);
+	newDiv.append(btnWrapDiv);
+
+	console.log(newDiv);
+
+	$('#deposit').append(newDiv);
+
+	$('#no_deposit').val('');
+	$('#nm_depositor').val('');
+
+}
+
+function depositDel(element){
+	const parentDiv = element.closest('.inpt_wrap.acc');
+	if (parentDiv) {
+		parentDiv.remove(); // 부모 요소를 삭제합니다.
+	} else {
+		console.error('부모 요소를 찾을 수 없습니다.');
+	}
 }

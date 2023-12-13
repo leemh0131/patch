@@ -105,16 +105,16 @@
 							<input type="text" id="debtor_sns" placeholder="기타SNS">
 						</div>
 					</div>
-					<div class="group">
+					<div class="group" id="deposit">
 						<p class="tit">상환계좌</p>
 						<div class="inpt_wrap acc">
 							<select id="ES_Q0009">
 
 							</select>
-							<input type="text" class="acc_num" placeholder="계좌번호를 입력하세요.">
-							<input type="text" placeholder="입금자명">
+							<input type="text" class="acc_num" id="no_deposit" placeholder="계좌번호를 입력하세요.">
+							<input type="text" id="nm_depositor" placeholder="입금자명">
 							<div class="btn_wrap">
-								<button class="btn bg_bk"><span>추가</span></button>
+								<button onclick="depositAdd()" class="btn bg_bk"><span>추가</span></button>
 							</div>
 						</div>
 					</div>
@@ -137,6 +137,12 @@
 						<p class="tit">피해종류</p>
 						<div class="inpt_wrap">
 							<textarea id="dm_contents" placeholder="직접 입력하세요."></textarea>
+						</div>
+					</div>
+					<div class="group">
+						<p class="tit">비밀번호</p>
+						<div class="inpt_wrap">
+							<input type="text" id="pw" placeholder="비밀번호">
 						</div>
 					</div>
 				</div>
