@@ -51,6 +51,9 @@
 			})
 			.catch((err) => {
 				alert("네트워크 오류가 발생!!.");
+			}).finally(function () {
+				$('.user_slide').length && userSlide();
+				$('.main_user_slide').length && mainUserSlide();
 			});
 
 			function polices(polices) {
@@ -142,7 +145,18 @@
 	<!--// 검색영역 -->
 
 	<!-- 2023-11-17 서브메뉴추가 -->
-	<div class="sub_menu" id="sub_menu"></div>
+	<div class="sub_menu">
+		<div class="menu_slide swiper">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide"><a href="/reg_01.html" title="피해등록하기">피해등록하기</a></div>
+				<div class="swiper-slide"><a href="/view_list_01.html" title="불법대부업">불법대부업</a></div>
+				<div class="swiper-slide"><a href="/view_list_02.html" title="기타금융사기">기타금융사기</a></div>
+				<div class="swiper-slide"><a href="/community_list.html" title="커뮤니티">커뮤니티</a></div>
+				<div class="swiper-slide"><a href="/cs_list.html" title="법률상담문의">법률상담문의</a></div>
+				<div class="swiper-slide"><a href="/job_list.html" title="일자리찾기">일자리찾기</a></div>
+			</div>
+		</div>
+	</div>
 	<!--// 2023-11-17 서브메뉴추가 -->
 
 	<!-- #contents -->
