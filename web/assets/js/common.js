@@ -1,3 +1,12 @@
+window.onload = function(){
+	$("#header").load("/include/header.html");
+	$("#footer").load("/include/footer.html");
+	$("#sub").load("/include/sub.html");
+	$("#sub_menu").load("/include/sub_menu.html");
+	$("#m_gnb_wrap").load("/include/m_gnb_wrap.html");
+	$("#site_srch_wrap").load("/include/site_srch_wrap.html");
+}
+
 $(document).ready(function(){
 	$('#header').length && gnbMenu(); //pc GNB 메뉴
 	$('.user_slide').length && userSlide();
@@ -5,12 +14,12 @@ $(document).ready(function(){
 	$('.loc_tab').length && mapTab();
 	$('.menu_slide').length && menuSlide();
 	//$('.ctrl_trg').length && csList();
-	$("#header").load("/include/header.html");
+	/*$("#header").load("/include/header.html");
 	$("#footer").load("/include/footer.html");
 	$("#sub").load("/include/sub.html");
 	$("#sub_menu").load("/include/sub_menu.html");
 	$("#m_gnb_wrap").load("/include/m_gnb_wrap.html");
-	$("#site_srch_wrap").load("/include/site_srch_wrap.html");
+	$("#site_srch_wrap").load("/include/site_srch_wrap.html");*/
 
 	$('#list').on('click', '.ctrl_trg', function(e) {
 		e.preventDefault();
@@ -165,7 +174,7 @@ function muCenter(target, num, type) { //탭 가운데 이동
 		listWidth += $(this).outerWidth();
 	})
 
-	var selectTargetPos = 100;//targetPos.left + target.outerWidth() / 2;
+	var selectTargetPos = targetPos.left + target.outerWidth() / 2;
 	if (selectTargetPos <= boxHalf) { // left
 		pos = 0;
 	} else if ((listWidth - selectTargetPos) <= boxHalf) { //right
