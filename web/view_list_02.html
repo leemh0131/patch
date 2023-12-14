@@ -13,7 +13,7 @@
 	<script type="text/javascript" src="./assets/js/lib/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
 	<script type="text/javascript" src="./assets/js/common.js"></script>
-	<title>실시간 불법대부업</title>
+	<title>실시간 기타금융사기</title>
 	<script>
 		$(document).ready(function() {
 			let moreBtnCount = 0;
@@ -57,7 +57,7 @@
 
 					var tel = document.createElement('p');
 					tel.className = 'tel';
-					tel.textContent = '연락처 : ' + data.DEBTOR_TEL;
+					tel.textContent = '연락처 : ' + changeDataMaskFormat(data.DEBTOR_TEL, 'phone');
 
 					var infoWrap = document.createElement('div');
 					infoWrap.className = 'info_wrap';
@@ -72,7 +72,7 @@
 					btnWrap.className = 'btn_wrap';
 
 					var btn = document.createElement('a');
-					btn.href = '#';
+					btn.href = '/view_detail_01.html?dmCd=' + data.DM_CD;
 					btn.className = 'btn';
 					btn.innerHTML = '<span>자세히보기</span>';
 
@@ -114,7 +114,7 @@
 				<div class="location">
 					<ul>
 						<li>
-							<a href="/main.html" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
+							<a href="/index.html" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
 						</li>
 						<li>
 							<a href="/view_list_02.html"><span>기타금융사기</span></a>
@@ -122,7 +122,7 @@
 					</ul>
 				</div>
 				<div class="sub_tit_area">
-					<h2>기타금융사기</h2>
+					<h2>실시간 기타금융사기</h2>
 				</div>
 
 				<section class="list_sec">

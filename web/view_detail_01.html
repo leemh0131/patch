@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<meta name="format-detection" content="telephone=no, address=no, email=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+	<link rel="stylesheet" href="./assets/css/lib/swiper-bundle.min.css">
+	<link rel="stylesheet" href="./assets/css/common.css">
+
+	<script type="text/javascript" src="./assets/js/lib/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
+	<script type="text/javascript" src="./assets/js/common.js"></script>
+	<title>불법대부업 상세</title>
+	<script>
+		$(document).ready(function() {
+			let moreBtnCount = 1;
+			let urlParams = new URLSearchParams(location.search);
+
+			let dmCd = nvl(urlParams.get('dmCd'));
+			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMDetail', {DM_CD: dmCd})
+			.then((res) => {
+				if (nvl(res.map.item) != '') {
+					item(res.map.item);
+				}
+				if (nvl(res.map.list) != '') {
+					list(res.map.list);
+				}
+				if (nvl(res.map.comm_list) != '') {
+					comm_list(res.map.comm_list);
+				}
+			})
+			.catch((err) => {
+				alert("네트워크 오류가 발생!!.");
+			});
+
+			$("#moreBtn").on("click", search);
+
+			$("#setComm").on("click", setComm);
+
+			function setComm() {
+				let nickNm = $('#nickNm').val();
+				let password = $('#password').val();
+				let contents = $('#contentsText').val();
+
+				if (nvl(nickNm) == '') {
+					alert("닉네임을 입력해주세요")
+					return;
+				}
+				if (nvl(password) == '') {
+					alert("비밀번호를 입력해주세요")
+					return;
+				}
+				if (nvl(contents) == '') {
+					alert("내용을 입력해주세요")
+					return;
+				}
+
+				postData('http://117.52.84.88:8080/api/web/v1/setPrivateLoanPlDmComm', {DM_CD: dmCd, PARENT_CD: '', NICK_NM: nickNm, PASSWORD: password, CONTENTS: contents})
+				.then((res) => {
+					location.reload();
+				})
+				.catch((err) => {
+					alert("네트워크 오류가 발생!!.");
+				});
+			}
+
+			function search() {
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmCommList', {DM_CD: dmCd, MORE_BTN_COUNT: moreBtnCount})
+				.then((res) => {
+					if (nvl(res.map.list, '') != '') {
+						comm_list(res.map.list);
+					} else {
+						alert("마지막 페이지 입니다.");
+					}
+				})
+				.catch((err) => {
+					alert("네트워크 오류가 발생!!.");
+				});
+				moreBtnCount++;
+			}
+
+			function comm_list(list) {
+				var pe = document.getElementById('cmt_list');
+				list.forEach(function (data) {
+					var listItem = document.createElement("li");
+					var figure = document.createElement("figure");
+					figure.className = "img";
+
+					var img = document.createElement("img");
+					img.src = "assets/images/profile.png";
+					img.alt = "프로필";
+					figure.appendChild(img);
+
+					var textWrap = document.createElement("div");
+					textWrap.className = "txt_wrap";
+
+					var infoWrap = document.createElement("div");
+					infoWrap.className = "info_wrap";
+
+					var idParagraph = document.createElement("p");
+					idParagraph.className = "id";
+					idParagraph.textContent = data.NICK_NM;
+
+					var dateSpan = document.createElement("span");
+					dateSpan.className = "date";
+					dateSpan.textContent = changeDataFormat(data.WRITE_DATE, 'date');
+
+					var replyLink = document.createElement("a");
+					replyLink.href = "#";
+					replyLink.textContent = "답글";
+
+					var reportLink = document.createElement("a");
+					reportLink.href = "#";
+					reportLink.textContent = "신고";
+
+					infoWrap.appendChild(idParagraph);
+					infoWrap.appendChild(dateSpan);
+					infoWrap.appendChild(replyLink);
+					infoWrap.appendChild(reportLink);
+
+					var commentParagraph = document.createElement("p");
+					commentParagraph.className = "comment";
+					commentParagraph.textContent = data.CONTENTS;
+
+					textWrap.appendChild(infoWrap);
+					textWrap.appendChild(commentParagraph);
+					listItem.appendChild(figure);
+					listItem.appendChild(textWrap);
+
+					pe.appendChild(listItem);
+
+				})
+
+			}
+
+			function item(item) {
+				$('#comp_nm').html(item.COMP_NM);
+				$('#borw_site').html(item.BORW_SITE);
+				$('#debtor_tel').html(changeDataMaskFormat(item.DEBTOR_TEL, 'phone'));
+				$('#debtor_kakao').html(item.DEBTOR_KAKAO);
+				$('#dm_kind').html(item.DM_KIND);
+				$('#debtor_tele').html(item.DEBTOR_TELE);
+				$('#debtor_sns').html(item.DEBTOR_SNS);
+				$('#withdr_loca').html(item.WITHDR_LOCA);
+				$('#compl_police').html(item.COMPL_POLICE);
+				$('#dm_contents').html(item.DM_CONTENTS);
+			}
+
+			function list(slideData) {
+				var swiperWrapper = document.getElementById('user_list');
+				slideData.forEach(function (data) {
+					var slide = document.createElement('div');
+					slide.className = 'swiper-slide';
+
+					var item = document.createElement('div');
+					if (nvl(data.NEW_VALUE, '') == 'Y') {
+						item.className = 'item new';
+					} else {
+						item.className = 'item new2';
+					}
+
+					var name = document.createElement('p');
+					name.className = 'name';
+					name.textContent = data.COMP_NM;
+
+					var tel = document.createElement('p');
+					tel.className = 'tel';
+					var stel = document.createElement('span');
+					stel.textContent = '연락처 : ' + changeDataMaskFormat(data.DEBTOR_TEL, 'phone');
+					tel.appendChild(stel);
+
+					var infoWrap = document.createElement('div');
+					infoWrap.className = 'info_wrap';
+
+					infoWrap.innerHTML = `
+					  <p>카카오톡 : <span>${data.DEBTOR_KAKAO}</span></p>
+					  <p>텔레그램 : <span>${data.DEBTOR_TELE}</span></p>
+					  <p>기타SNS : <span>${data.DEBTOR_SNS}</span></p>
+					`;
+
+					var btnWrap = document.createElement('div');
+					btnWrap.className = 'btn_wrap';
+
+					var btn = document.createElement('a');
+					btn.href = '/view_detail_01.html?dmCd=' + data.DM_CD;
+					btn.className = 'btn';
+					btn.innerHTML = '<span>자세히보기</span>';
+
+					// Append elements to the DOM
+					btnWrap.appendChild(btn);
+					item.appendChild(name);
+					item.appendChild(tel);
+					item.appendChild(infoWrap);
+					item.appendChild(btnWrap);
+					slide.appendChild(item)
+					swiperWrapper.appendChild(slide);
+				})
+			}
+		});
+	</script>
+</head>
+<body>
+<!-- #WRAP -->
+<div id="wrap">
+	<!-- #header -->
+	<header id="header"></header>
+	<!--// #header -->
+
+	<!-- 모바일 사이트 메뉴 -->
+	<div class="m_gnb_wrap" id="m_gnb_wrap"></div>
+	<!--// 모바일 사이트 메뉴 -->
+
+	<!-- 검색영역 -->
+	<div class="site_srch_wrap" id="site_srch_wrap"></div>
+	<!--// 검색영역 -->
+
+	<!-- 2023-11-17 서브메뉴추가 -->
+	<div class="sub_menu" id="sub_menu"></div>
+	<!--// 2023-11-17 서브메뉴추가 -->
+
+	<!-- #contents -->
+	<div id="contents">
+		<div class="inner">
+			<div class="content">
+				<div class="location">
+					<ul>
+						<li>
+							<a href="/index.html" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
+						</li>
+						<li>
+							<a href="/view_list_01.html"><span>불법대부업</span></a>
+						</li>
+					</ul>
+				</div>
+				<div class="sub_tit_area">
+					<h2 id="comp_nm"></h2>
+				</div>
+
+				<!-- 상세 정보 -->
+				<div class="view_sec view_info">
+					<h3>상세정보</h3>
+					<dl>
+						<dt>차용사이트</dt>
+						<dd id="borw_site"></dd>
+					</dl>
+					<dl>
+						<dt>연락처</dt>
+						<dd id="debtor_tel"></dd>
+					</dl>
+					<dl>
+						<dt>카카오톡</dt>
+						<dd id="debtor_kakao"></dd>
+					</dl>
+					<dl>
+						<dt>텔레그램</dt>
+						<dd id="debtor_tele"></dd>
+					</dl>
+					<dl>
+						<dt>기타 SNS</dt>
+						<dd id="debtor_sns"></dd>
+					</dl>
+					<dl>
+						<dt>상환계좌</dt>
+						<dd>모름</dd>
+					</dl>
+					<dl>
+						<dt>스마트출금 위치</dt>
+						<dd id="withdr_loca"></dd>
+					</dl>
+					<dl>
+						<dt>추심피해(종류)</dt>
+						<dd id="dm_kind"></dd>
+					</dl>
+					<dl>
+						<dt>피해내용</dt>
+						<dd id="dm_contents"></dd>
+					</dl>
+					<dl>
+						<dt>고소한 경찰서</dt>
+						<dd id="compl_police"></dd>
+					</dl>
+				</div>
+				<!--// 상세 정보 -->
+
+				<!-- 관련 불법사채업자 -->
+				<div class="view_sec view_user">
+					<h3>관련 불법사채업자</h3>
+					<div class="user_list user_slide swiper">
+						<div class="swiper-wrapper" id="user_list">
+						</div>
+					</div>
+				</div>
+				<!--// 관련 불법사채업자 -->
+
+				<!-- 댓글 -->
+				<div class="comment_wrap">
+					<p class="cmt_count">댓글 (<em>12</em>) </p>
+
+					<div class="cmt_form">
+						<div class="cmt_inpt">
+							<input type="text" id="nickNm" placeholder="닉네임">
+							<input type="password" id="password" placeholder="비밀번호">
+						</div>
+						<div class="cmt_textarea">
+							<textarea id="contentsText" placeholder="타인의 권리를 침해하거나 명예를 훼손하는 댓글은 관련 법률에 의해 제재를 받을 수 있습니다."></textarea>
+							<div class="opt_area">
+								<div class="add_wrap">
+									<label for="camera">
+										<i class="camera"></i>
+										<input type="file" id="camera">
+									</label>
+									<button type="button" class="emg"></button>
+								</div>
+								<div class="btn_wrap">
+									<button class="btn" id="setComm"><span>등록</span></button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="cmt_list">
+						<ul id="cmt_list">
+							<!--<li>
+								<figure class="img">
+									<img src="assets/images/profile.png" alt="프로필">
+								</figure>
+								<div class="txt_wrap">
+									<div class="info_wrap">
+										<p class="id">김****</p>
+										<span class="date">2022-04-30 15:00</span>
+										<a href="#">답글</a>
+										<a href="#">신고</a>
+									</div>
+									<p class="comment">
+										추심 피해가 너무 심각합니다.
+									</p>
+
+									&lt;!&ndash;<ul>
+										<li>
+											<div class="info_wrap">
+												<p class="id">kimsu</p>
+												<span class="date">2022-04-30 15:00</span>
+												<a href="#">답글</a>
+												<a href="#">신고</a>
+											</div>
+											<p class="comment">
+												추심 피해가 너무 심각합니다.
+											</p>
+
+											&lt;!&ndash; 2023-11-22 추가 &ndash;&gt;
+											<a href="#" class="cmt_write">댓글쓰기</a>
+										</li>
+										<li>
+											<div class="info_wrap">
+												<p class="id">kimsu</p>
+												<span class="date">2022-04-30 15:00</span>
+												<a href="#">답글</a>
+												<a href="#">신고</a>
+											</div>
+											<p class="comment">
+												추심 피해가 너무 심각합니다.
+											</p>
+
+											&lt;!&ndash; 2023-11-22 추가 &ndash;&gt;
+											<a href="#" class="cmt_write">댓글쓰기</a>
+										</li>
+									</ul>&ndash;&gt;
+
+									&lt;!&ndash; 2023-11-22 추가 &ndash;&gt;
+									&lt;!&ndash;<div class="inpt_cmt">
+										<input type="text" placeholder="댓글 내용을 입력해주세요.">
+										<div class="btn_wrap">
+											<button class="btn"><span>등록</span></button>
+										</div>
+									</div>&ndash;&gt;
+									&lt;!&ndash;// 2023-11-22 추가 &ndash;&gt;
+								</div>
+							</li>-->
+						</ul>
+					</div>
+
+					<div class="btn_wrap">
+						<button class="btn btn_more" id="moreBtn">
+							<span>더보기</span>
+						</button>
+					</div>
+				</div>
+				<!--// 댓글 -->
+			</div>
+
+			<!-- 사이드 메뉴 -->
+			<div class="snb" id="sub"></div>
+			<!--// 사이드 메뉴 -->
+		</div>
+	</div>
+	<!--// #contents -->
+
+
+	<!-- #footer -->
+	<footer id="footer"></footer>
+	<!--// #footer -->
+</div>
+<!-- // WRAP -->
+</body>
+</html>

@@ -2,9 +2,9 @@
   $(document).ready(function() {
     postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanSubInfo', {SIDO: $("#ES_Q0009 option:selected").val(), KEYWORD: $('#police_srch_keyword').val()})
     .then((res) => {
-      /*if (nvl(res.map.list1, '') != '') {
+      if (nvl(res.map.list1, '') != '') {
         list(res.map.list1, 'live_comment');
-      }*/
+      }
       if (nvl(res.map.list2, '') != '') {
         list(res.map.list2, 'board');
       }
@@ -30,7 +30,6 @@
       location.href = '/view_list_03.html?dmType=' + $("#dm_type option:selected").val() + "&srchKeyword=" + $('#srch_keyword').val();
     }
 
-
     function list(list, btnId) {
       var ulElement = document.getElementById(btnId);
       list.forEach(function (item) {
@@ -41,11 +40,13 @@
         var spanElement = document.createElement('span');
 
         pElement.textContent = item.TITLE;
-        spanElement.textContent = item.DTS;
+        spanElement.textContent = changeDataFormat(item.DTS, 'date');
 
         aElement.appendChild(pElement);
         aElement.appendChild(spanElement);
-        // aElement.href = '#';
+        if (nvl(item.CODE) != '') {
+          aElement.href = '/view_detail_01.html?dmCd=' + item.CODE;
+        }
 
         liElement.appendChild(aElement);
         ulElement.appendChild(liElement);

@@ -165,7 +165,7 @@ function muCenter(target, num, type) { //탭 가운데 이동
 		listWidth += $(this).outerWidth();
 	})
 
-	var selectTargetPos = targetPos.left + target.outerWidth() / 2;
+	var selectTargetPos = 100;//targetPos.left + target.outerWidth() / 2;
 	if (selectTargetPos <= boxHalf) { // left
 		pos = 0;
 	} else if ((listWidth - selectTargetPos) <= boxHalf) { //right
@@ -479,5 +479,30 @@ function depositDel(element){
 		parentDiv.remove(); // 부모 요소를 삭제합니다.
 	} else {
 		console.error('부모 요소를 찾을 수 없습니다.');
+	}
+}
+
+function changeDataFormat(value, type) {
+	if(type == 'date'){
+		var dateData = nvl(value).replace(/[^a-zA-Z0-9]/g, "");
+		if(dateData.length == 4){
+			return dateData;
+		}else if(dateData.length == 6){
+			return value.replace(/(\d{4})(\d{2})/, '$1-$2');
+		}else if(dateData.length == 8){
+			return value.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+		}else if(dateData.length >= 12){
+			return value.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+			return dateData;
+		}
+	}
+}
+
+function changeDataMaskFormat(value, type) {
+	if (nvl(value, '모름') == '모름') {
+		return value;
+	}
+	if (type == 'phone') {
+		return value.replace(/(..)$/, "**");
 	}
 }

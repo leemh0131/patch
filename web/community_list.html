@@ -60,7 +60,7 @@
 
 					var dateDivElement = document.createElement('div');
 					dateDivElement.className = 'comm_date';
-					dateDivElement.textContent = data.DTS;
+					dateDivElement.textContent = changeDataFormat(data.DTS, 'date');
 
 					liElement.appendChild(seqDivElement);
 					titDivElement.appendChild(aElement);
@@ -99,7 +99,7 @@
 				<div class="location">
 					<ul>
 						<li>
-							<a href="/main.html" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
+							<a href="/index.html" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
 						</li>
 						<li>
 							<a href="/community_list.html"><span>커뮤니티</span></a>

@@ -93,7 +93,7 @@
 
 					var tel = document.createElement('p');
 					tel.className = 'tel';
-					tel.textContent = '연락처 : ' + data.DEBTOR_TEL;
+					tel.textContent = '연락처 : ' + changeDataMaskFormat(data.DEBTOR_TEL, 'phone');
 
 					var infoWrap = document.createElement('div');
 					infoWrap.className = 'info_wrap';
@@ -109,7 +109,7 @@
 					btnWrap.className = 'btn_wrap';
 
 					var btn = document.createElement('a');
-					btn.href = '#';
+					btn.href = '/view_detail_01.html?dmCd=' + data.DM_CD;
 					btn.className = 'btn';
 					btn.innerHTML = '<span>자세히보기</span>';
 
