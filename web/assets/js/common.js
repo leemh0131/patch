@@ -404,7 +404,7 @@ function commonRegWrite(dm_type){
 			res = res.map;
 			if(res.response == 'ok'){
 				alert("등록이 완료되었습니다.");
-				location.href = '/view_list_01.html';
+				location.href = '/view_detail_01.html?dmCd=' + res.DM_CD;
 			}
 
 
@@ -490,8 +490,13 @@ function changeDataFormat(value, type) {
 			return value.replace(/(\d{4})(\d{2})/, '$1-$2');
 		}else if(dateData.length == 8){
 			return value.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
-		}else if(dateData.length >= 12){
+		}else if(dateData.length == 10){
+			return value.replace(/(\d{4})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4');
+		}else if(dateData.length == 12){
+			return value.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5');
+		}else if(dateData.length >= 14){
 			return value.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+		} else {
 			return dateData;
 		}
 	}
