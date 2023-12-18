@@ -3,7 +3,7 @@
 /*
 	z-index 위계
 
-	#header		999
+	#"header		999
 	모바일 사이트 메뉴		999
 	검색영역			999
 	딤드				998
@@ -148,9 +148,9 @@ figure img {display:block; width:100%; height:auto; object-fit:cover;}
 	#contents.main .content {width:100%;}
 	#contents.main .snb {display:block; width:100%; margin-left:0; margin-top:-20px;}
 	#contents.main .snb .group ~ .group {margin-top:64px;}
-	#contents.main .snb .group:nth-child(1),
-	#contents.main .snb .group:nth-child(2),
-	#contents.main .snb .group:nth-child(5) {display:none;}
+	#contents.main .snb .group:nth-child(1){display:none;}
+	#contents.main .snb .group:nth-child(2)
+	#contents.main .snb .group:nth-child(5) /*{display:none;}*/
 }
 @media only screen and (max-width:550px) {
 	.ad_wrap .img {height:auto;}
@@ -206,11 +206,48 @@ textarea {resize:none; padding:16px 20px; width:100%; height:240px; box-sizing:b
 .main_bnr .btn_bnr {margin-top:16px; display:flex; align-items:center; justify-content:center; width:115px; height:32px; background-color:#fff; line-height:1.538em; border-radius:2px; color:#383B40; font-size:12px; font-weight:700;}
 .main_bnr .btn_bnr span {padding-right:24px; background:url(../images/arr_right.svg) no-repeat right center; background-size:20px 20px;}
 
-.srch_form {width:calc(50% - 16px); margin-left:32px; border-radius: 2px; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.08); padding:24px 12px 24px 24px; height: 180px; overflow-y:auto; box-sizing:border-box;}
+.srch_form {width:calc(50% - 16px); margin-left:32px; border-radius: 2px; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.08); padding:24px 12px 24px 24px; height: 180px;  box-sizing:border-box;}
 .srch_form .inpt_srch {display:flex; margin-bottom:24px;}
 .srch_form .inpt_srch select {width:129px;}
 .srch_form .inpt_srch .srch {margin-left:9px; flex:1;}
 .srch_form .inpt_srch .srch button {right:16px;}
+.srch_form .res_wrap {
+	max-height: 60px; /* 최대 높이 지정 */
+	overflow-y: auto; /* 세로 스크롤만 표시되도록 설정 */
+
+}
+
+/* 스크롤 바 */
+::-webkit-scrollbar {
+	width: 5px; /* 얇은 스크롤 너비 */
+}
+
+/* 스크롤 바 트랙 */
+::-webkit-scrollbar-track {
+	background: #f1f1f1; /* 스크롤 트랙 배경 */
+}
+
+/* 스크롤 바 thumb(바 부분) */
+::-webkit-scrollbar-thumb {
+	background: #888; /* 스크롤 바 thumb 색상 */
+	border-radius: 4px; /* 스크롤 바 thumb 모양 */
+}
+
+/* 스크롤 바 thumb hover 시 */
+::-webkit-scrollbar-thumb:hover {
+	background: #555; /* 스크롤 바 thumb hover 시 색상 */
+}
+
+/* 스크롤 바 thumb 클릭 시 */
+::-webkit-scrollbar-thumb:active {
+	background: #333; /* 스크롤 바 thumb 클릭 시 색상 */
+}
+
+/* 스크롤 바 corner */
+::-webkit-scrollbar-corner {
+	background: transparent; /* 스크롤 바 코너 색상 */
+}
+
 .srch_form .res_wrap ul {border-top:2px solid #111;}
 .srch_form .res_wrap p.txt {font-size:13px; line-height:1.538em; margin-bottom:12px; display:none;}
 .srch_form .res_wrap p.txt em {color:#044BD9; font-weight:700;}

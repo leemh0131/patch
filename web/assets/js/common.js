@@ -1,9 +1,7 @@
 window.onload = function(){
-	$("#header").load("/include/header.html");
 	$("#footer").load("/include/footer.html");
 	$("#sub").load("/include/sub.html");
 	$("#m_gnb_wrap").load("/include/m_gnb_wrap.html");
-	$("#site_srch_wrap").load("/include/site_srch_wrap.html");
 }
 
 $(document).ready(function(){

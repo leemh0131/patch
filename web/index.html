@@ -13,45 +13,55 @@
 	<script type="text/javascript" src="./assets/js/lib/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
 	<script type="text/javascript" src="./assets/js/common.js"></script>
+	<script type="text/javascript" src="./minitalk/scripts/minitalk.js" charset="UTF-8"></script>
+
 	<title>메인</title>
 	<script>
 		$(document).ready(function() {
+
+			$("#m_btn_search").on("click", srchBtn);
+
+			function srchBtn() {
+				location.href = '/view_list_03.html?srchKeyword=' + $('#m_srch_keyword').val();
+			}
+
+
 			$("#police_srch_btn").on("click", policeSrchBtn);
 
 			function policeSrchBtn() {
 				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanInfoPolice', {SIDO: $("#ES_Q0009 option:selected").val(), KEYWORD: $('#police_srch_keyword').val()})
-				.then((res) => {
-					$("#polices").empty();
-					if (nvl(res.map.list, '') != '') {
-						polices(res.map.list);
-					}
-				})
-				.catch((err) => {
-					alert("네트워크 오류가 발생!!.");
-				});
+						.then((res) => {
+							$("#polices").empty();
+							if (nvl(res.map.list, '') != '') {
+								polices(res.map.list);
+							}
+						})
+						.catch((err) => {
+							alert("네트워크 오류가 발생!!.");
+						});
 			}
 			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanMain', {})
-			.then((res) => {
-				if (nvl(res.map.list1, '') != '') {
-					list1(1, res.map.list1);
-				}
-				if (nvl(res.map.list2, '') != '') {
-					list1(2, res.map.list2);
-				}
-				if (nvl(res.map.ES_Q0142) != '') {
-					$("#ES_Q0009").empty();
-					res.map.ES_Q0142.forEach((item) => {
-						let option = `<option value="${item.CODE}">${item.NAME}</option>`;
-						$("#ES_Q0009").append(option);
-					});
-				}
-				if (nvl(res.map.polices, '') != '') {
-					polices(res.map.polices);
-				}
-			})
-			.catch((err) => {
-				alert("네트워크 오류가 발생!!.");
-			}).finally(function () {
+					.then((res) => {
+						if (nvl(res.map.list1, '') != '') {
+							list1(1, res.map.list1);
+						}
+						if (nvl(res.map.list2, '') != '') {
+							list1(2, res.map.list2);
+						}
+						if (nvl(res.map.ES_Q0142) != '') {
+							$("#ES_Q0009").empty();
+							res.map.ES_Q0142.forEach((item) => {
+								let option = `<option value="${item.CODE}">${item.NAME}</option>`;
+								$("#ES_Q0009").append(option);
+							});
+						}
+						if (nvl(res.map.polices, '') != '') {
+							polices(res.map.polices);
+						}
+					})
+					.catch((err) => {
+						alert("네트워크 오류가 발생!!.");
+					}).finally(function () {
 				$('.user_slide').length && userSlide();
 				$('.main_user_slide').length && mainUserSlide();
 			});
@@ -133,7 +143,36 @@
 <!-- #WRAP -->
 <div id="wrap">
 	<!-- #header -->
-	<header id="header"></header>
+	<header id="header">
+		<div class="inner">
+			<h1>
+				<a href="index.html">
+					<img src="assets/images/logo.png" alt="사채패스">
+				</a>
+			</h1>
+
+			<nav>
+				<ul>
+					<li><a href="reg_01.html" title="피해등록하기"><span>피해등록하기</span></a></li>
+					<li><a href="view_list_01.html" title="불법대부업"><span>불법대부업</span></a></li>
+					<li><a href="view_list_02.html" title="기타금융사기"><span>기타금융사기</span></a></li>
+					<li><a href="community_list.html" title="커뮤니티"><span>커뮤니티</span></a></li>
+					<!--<li><a href="cs_list.html" title="법률상담문의"><span>법률상담문의</span></a></li>
+                    <li><a href="job_list.html" title="일자리찾기"><span>일자리찾기</span></a></li>-->
+				</ul>
+			</nav>
+
+			<div class="util_menu">
+				<a href="cs_01.html" title="고객센터">고객센터</a>
+			</div>
+
+			<div class="m_util_menu">
+				<button type="button" class="btn_search" id="btn_search"><span class="blind">검색버튼</span></button>
+				<!--<button type="button" class="btn_site_menu"><span class="blind">사이트 메뉴 버튼</span></button>-->
+				<button type="button" class="btn_close"><span class="blind">닫기 버튼</span></button>
+			</div>
+		</div>
+	</header>
 	<!--// #header -->
 
 	<!-- 모바일 사이트 메뉴 -->
@@ -141,7 +180,18 @@
 	<!--// 모바일 사이트 메뉴 -->
 
 	<!-- 검색영역 -->
-	<div class="site_srch_wrap" id="site_srch_wrap"></div>
+	<div class="site_srch_wrap">
+		<div class="srch_inner">
+			<h2>불법대부업 및 금융사기 검색</h2>
+
+			<!-- 검색 input -->
+			<div class="srch">
+				<input type="text" id="m_srch_keyword" placeholder="불법사채업자를 검색하세요.">
+				<button type="submit" id="m_btn_search"><span class="blind">검색</span></button>
+			</div>
+			<!--// 검색 input -->
+		</div>
+	</div>
 	<!--// 검색영역 -->
 
 	<!-- 2023-11-17 서브메뉴추가 -->
@@ -164,20 +214,35 @@
 		<div class="inner">
 			<div class="content">
 				<!-- 채팅영역 PC -->
-				<div class="chat_wrap_pc">
-					<div style="height:100%; display: flex; align-items: center; justify-content:center;"><p style="font-weight: 700; font-size:20px;">채팅 영역</p></div>
+
+				<div style="width: 100%;height:400px">
+
+
+					<script>
+
+						new Minitalk({
+							id:"sctalk",
+							channel:"sc112",
+							width:"100%",
+							height:"100%",
+							viewUserNotification:[] // 유저 참여메시지만 보이도록 설정
+						});
+
+					</script>
+
 				</div>
+
 				<!--// 채팅영역 PC -->
 
-				<!-- 채팅영역 Mobile -->
+				<!-- 채팅영역 Mobile
 				<div class="chat_wrap_mo">
 					<div style="height:100%; display: flex; align-items: center; justify-content:center;"><p style="font-weight: 700; font-size:20px;">채팅 영역</p></div>
-				</div>
+				</div> -->
 				<!--// 채팅영역 Mobile -->
 
 				<section class="user_sec">
 					<div class="sec_tit">
-						<h3 class="tit">실시간 등록 불법사채</h3>
+						<h3 class="tit">실시간 등록 불법대부업</h3>
 						<a href="view_list_01.html" class="more">더보기</a>
 					</div>
 					<div class="user_list user_slide swiper">
@@ -217,7 +282,7 @@
 				<!--// 2023-11-22 수정 -->
 				<section class="user_sec">
 					<div class="sec_tit">
-						<h3 class="tit">실시간 등록 기타금전사기</h3>
+						<h3 class="tit">실시간 등록 기타금융사기</h3>
 						<a href="view_list_02.html" class="more">더보기</a>
 					</div>
 					<div class="user_list main_user_slide swiper">
@@ -230,6 +295,7 @@
 
 			<!-- 사이드 메뉴 -->
 			<div class="snb" id="sub"></div>
+
 			<!--// 사이드 메뉴 -->
 		</div>
 	</div>
