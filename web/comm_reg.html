@@ -13,7 +13,52 @@
     <script type="text/javascript" src="./assets/js/lib/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
     <script type="text/javascript" src="./assets/js/common.js"></script>
-    <title>커뮤니티 등록하기</title>
+    <title>불법사채 DB검색 및 신고포털-사채패치</title>
+    <script>
+        $(document).ready(function() {
+
+            $("#writeBtn").on("click", setWrite);
+
+            function setWrite() {
+
+                if (nvl($('#name').val()) == '') {
+                    alert('작성자를 입력해주세요.')
+                    return;
+                }
+                if (nvl($('#pw').val()) == '') {
+                    alert('비밀번호를 입력해주세요.')
+                    return;
+                }
+                if (nvl($('#title').val()) == '') {
+                    alert('제목을 입력해주세요.')
+                    return;
+                }
+
+                if (nvl($('#contentss').val()) == '') {
+                    alert('내용을 입력해주세요.')
+                    return;
+                }
+                let param = {
+                    COMPANY_CD : '1000',
+                    COMMUNITY_GB : '02',
+                    COMMUNITY_TP : '03',
+                    COMMUNITY_ST : '14',
+                    NAME : nvl($('#name').val()),
+                    TITLE : nvl($('#title').val()),
+                    CONTENTS : nvl($('#contentss').val()),
+                    PW : nvl($('#pw').val()),
+                }
+                postData('http://117.52.84.88:8080/api/web/v1/setWrite', param)
+                .then((res) => {
+                    alert('등록이 완료되었습니다.');
+                    location.href = '/community_view.html?seq=' + res.map.SEQ;
+                })
+                .catch((err) => {
+                    alert("네트워크 오류가 발생!!.");
+                });
+            }
+        });
+    </script>
 </head>
 <body>
 <!-- #WRAP -->
@@ -35,12 +80,9 @@
                     <li><a href="community_list.html" title="커뮤니티"><span>커뮤니티</span></a></li>
                     <!--<li><a href="cs_list.html" title="법률상담문의"><span>법률상담문의</span></a></li>
                     <li><a href="job_list.html" title="일자리찾기"><span>일자리찾기</span></a></li>-->
+                    <li><a href="cs_01.html" title="고객센터"><span>고객센터</span></a></li>
                 </ul>
             </nav>
-
-            <div class="util_menu">
-                <a href="cs_01.html" title="고객센터">고객센터</a>
-            </div>
 
             <div class="m_util_menu">
                 <button type="button" class="btn_search" id="btn_search"><span class="blind">검색버튼</span></button>
@@ -67,6 +109,7 @@
                 <div class="swiper-slide"><a href="/view_list_01.html" title="불법대부업">불법대부업</a></div>
                 <div class="swiper-slide"><a href="/view_list_02.html" title="기타금융사기">기타금융사기</a></div>
                 <div class="swiper-slide"><a href="/community_list.html" title="커뮤니티">커뮤니티</a></div>
+                <div class="swiper-slide"><a href="/cs_01.html" title="고객센터">고객센터</a></div>
                 <!--<div class="swiper-slide"><a href="/cs_list.html" title="법률상담문의">법률상담문의</a></div>
                 <div class="swiper-slide"><a href="/job_list.html" title="일자리찾기">일자리찾기</a></div>-->
             </div>
@@ -116,7 +159,7 @@
                     <div class="group">
                         <p class="tit">내용</p>
                         <div class="inpt_wrap">
-                            <textarea id="contents" placeholder="직접 입력하세요."></textarea>
+                            <textarea id="contentss" placeholder="직접 입력하세요."></textarea>
                         </div>
                     </div>
 
@@ -124,7 +167,7 @@
 
                 <!-- 버튼 -->
                 <div class="btn_wrap">
-                    <a onclick="regWrite()" class="btn">
+                    <a id="writeBtn" class="btn">
                         <span>등록하기</span>
                     </a>
                 </div>
@@ -146,20 +189,3 @@
 <!-- // WRAP -->
 </body>
 </html>
-
-<script>
-
-
-
-    //쓰기
-    function regWrite(){
-        //		commonRegWrite("001");  커뮤니티 글쓰기로
-    }
-
-
-
-
-
-
-
-</script>

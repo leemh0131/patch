@@ -13,7 +13,7 @@
 	<script type="text/javascript" src="./assets/js/lib/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
 	<script type="text/javascript" src="./assets/js/common.js"></script>
-	<title>불법대부업 상세</title>
+	<title>불법사채 DB검색 및 신고포털-사채패치</title>
 	<script>
 		$(document).ready(function() {
 			let moreBtnCount = 1;
@@ -23,7 +23,7 @@
 			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMDetail', {DM_CD: dmCd})
 			.then((res) => {
 				if (nvl(res.map.item) != '') {
-					item(res.map.item);
+					item(res.map.item, res.map.item_detail);
 				}
 				if (nvl(res.map.list) != '') {
 					list(res.map.list);
@@ -87,6 +87,7 @@
 
 			function comm_list(list) {
 				var pe = document.getElementById('cmt_list');
+				$('#comm_count').html(list.length);
 				list.forEach(function (data) {
 					var listItem = document.createElement("li");
 					var figure = document.createElement("figure");
@@ -139,7 +140,7 @@
 
 			}
 
-			function item(item) {
+			function item(item, detail) {
 				$('#comp_nm').html(item.COMP_NM);
 				$('#borw_site').html(item.BORW_SITE);
 				$('#debtor_tel').html(changeDataMaskFormat(item.DEBTOR_TEL, 'phone'));
@@ -150,6 +151,15 @@
 				$('#withdr_loca').html(item.WITHDR_LOCA);
 				$('#compl_police').html(item.COMPL_POLICE);
 				$('#dm_contents').html(item.DM_CONTENTS);
+				if (nvl(detail) != '') {
+					let html = '';
+					for (let i = 0; i < detail.length; i++) {
+						html += detail[i].BANK_NM + ':' + detail[i].NO_DEPOSIT + ' ';
+					}
+					$('#deposit').html(html);
+				} else {
+					$('#deposit').html('모름');
+				}
 			}
 
 			function list(slideData) {
@@ -225,12 +235,9 @@
 					<li><a href="community_list.html" title="커뮤니티"><span>커뮤니티</span></a></li>
 					<!--<li><a href="cs_list.html" title="법률상담문의"><span>법률상담문의</span></a></li>
                     <li><a href="job_list.html" title="일자리찾기"><span>일자리찾기</span></a></li>-->
+					<li><a href="cs_01.html" title="고객센터"><span>고객센터</span></a></li>
 				</ul>
 			</nav>
-
-			<div class="util_menu">
-				<a href="cs_01.html" title="고객센터">고객센터</a>
-			</div>
 
 			<div class="m_util_menu">
 				<button type="button" class="btn_search" id="btn_search"><span class="blind">검색버튼</span></button>
@@ -257,6 +264,7 @@
 				<div class="swiper-slide"><a href="/view_list_01.html" title="불법대부업">불법대부업</a></div>
 				<div class="swiper-slide"><a href="/view_list_02.html" title="기타금융사기">기타금융사기</a></div>
 				<div class="swiper-slide"><a href="/community_list.html" title="커뮤니티">커뮤니티</a></div>
+				<div class="swiper-slide"><a href="/cs_01.html" title="고객센터">고객센터</a></div>
 				<!--<div class="swiper-slide"><a href="/cs_list.html" title="법률상담문의">법률상담문의</a></div>
 				<div class="swiper-slide"><a href="/job_list.html" title="일자리찾기">일자리찾기</a></div>-->
 			</div>
@@ -307,7 +315,7 @@
 					</dl>
 					<dl>
 						<dt>상환계좌</dt>
-						<dd>모름</dd>
+						<dd id="deposit">모름</dd>
 					</dl>
 					<dl>
 						<dt>스마트출금 위치</dt>
@@ -340,11 +348,11 @@
 
 				<!-- 댓글 -->
 				<div class="comment_wrap">
-					<p class="cmt_count">댓글 (<em>12</em>) </p>
+					<p class="cmt_count">댓글 (<em id="comm_count"></em>) </p>
 
 					<div class="cmt_form">
 						<div class="cmt_inpt">
-							<input type="text" id="nickNm" placeholder="닉네임">
+							<input type="text" id="nickNm" placeholder="닉네임" maxlength="10">
 							<input type="password" id="password" placeholder="비밀번호">
 						</div>
 						<div class="cmt_textarea">
