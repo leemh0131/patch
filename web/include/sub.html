@@ -42,8 +42,13 @@
 
         aElement.appendChild(pElement);
         aElement.appendChild(spanElement);
-        if (nvl(item.CODE) != '') {
-          aElement.href = '/view_detail_01.html?dmCd=' + item.CODE;
+
+        if ('live_comment' == btnId) {
+            aElement.href = '/view_detail_01.html?dmCd=' + item.CODE;
+        } else if ('community' == btnId) {
+          aElement.href = '/community_view.html?seq=' + item.SEQ;
+        } else if ('board' == btnId) {
+          // aElement.href = '/cs_02.html?seq=' + item.SEQ;
         }
 
         liElement.appendChild(aElement);

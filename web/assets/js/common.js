@@ -344,6 +344,7 @@ function commonRegWrite(dm_type){
 	let compl_police = nvl($("#compl_police").val()); 	//고소한경찰서명
 	let dm_contents = nvl($("#dm_contents").val()); 	//피해종류
 	let pw = nvl($("#pw").val()); 	//피해종류
+	let withdr_loca = $("input[name=smart_withdraw_text]").map(function() {return $(this).val().trim();}).get().join(',');
 	let use_yn = "Y";
 
 
@@ -390,6 +391,7 @@ function commonRegWrite(dm_type){
 		DEBTOR_SNS : debtor_sns,
 		COMPL_POLICE : compl_police,
 		DM_CONTENTS : dm_contents,
+		WITHDR_LOCA : withdr_loca,
 		USE_YN : use_yn,
 		DEPOSIT : depositList,
 		PW : pw,
@@ -501,13 +503,16 @@ function changeDataFormat(value, type) {
 }
 
 function changeDataMaskFormat(value, type) {
-	if (nvl(value, '모름') == '모름') {
+	if (nvl(value, '모름').indexOf('모름') != -1) {
 		return value;
+	}
+	if (type == 'name') {
+		return value.replace(/(.)$/, "*");
 	}
 	if (type == 'phone') {
 		return value.replace(/(..)$/, "**");
 	}
 	if (type == 'deposit') {
-		return value.replace(/(..)$/, "****");
+		return value.replace(/(....)$/, "****");
 	}
 }

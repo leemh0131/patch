@@ -30,20 +30,22 @@
 
 			let dmCd = nvl(urlParams.get('dmCd'));
 			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMDetail', {DM_CD: dmCd})
-					.then((res) => {
-						if (nvl(res.map.item) != '') {
-							item(res.map.item, res.map.item_detail);
-						}
-						if (nvl(res.map.list) != '') {
-							list(res.map.list);
-						}
-						if (nvl(res.map.comm_list) != '') {
-							comm_list(res.map.comm_list);
-						}
-					})
-					.catch((err) => {
-						alert("네트워크 오류가 발생!!.");
-					}).finally(function () {
+			.then((res) => {
+				if (nvl(res.map.item) != '') {
+					item(res.map.item, res.map.item_detail);
+				}
+				if (nvl(res.map.list) != '') {
+					list(res.map.list);
+				}
+				if (nvl(res.map.comm_list) != '') {
+					comm_list(res.map.comm_list);
+				} else {
+					$('#comm_count').html(0);
+				}
+			})
+			.catch((err) => {
+				alert("네트워크 오류가 발생!!.");
+			}).finally(function () {
 				$('.user_slide').length && userSlide();
 				$('.main_user_slide').length && mainUserSlide();
 			});
@@ -71,12 +73,12 @@
 				}
 
 				postData('http://117.52.84.88:8080/api/web/v1/setPrivateLoanPlDmComm', {DM_CD: dmCd, PARENT_CD: '', NICK_NM: nickNm, PASSWORD: password, CONTENTS: contents})
-						.then((res) => {
-							location.reload();
-						})
-						.catch((err) => {
-							alert("네트워크 오류가 발생!!.");
-						});
+				.then((res) => {
+					location.reload();
+				})
+				.catch((err) => {
+					alert("네트워크 오류가 발생!!.");
+				});
 			}
 
 			function search() {
@@ -144,9 +146,7 @@
 					listItem.appendChild(textWrap);
 
 					pe.appendChild(listItem);
-
 				})
-
 			}
 
 			function item(item, detail) {
@@ -163,7 +163,7 @@
 				if (nvl(detail) != '') {
 					let html = '';
 					for (let i = 0; i < detail.length; i++) {
-						html += detail[i].BANK_NM + ':' + changeDataMaskFormat(detail[i].NO_DEPOSIT, 'deposit') + ' ';
+						html += detail[i].BANK_NM + ' : ' + changeDataMaskFormat(detail[i].NM_DEPOSITOR, 'name') + ' : ' + changeDataMaskFormat(detail[i].NO_DEPOSIT, 'deposit') + ' ';
 					}
 					$('#deposit').html(html);
 				} else {
@@ -324,7 +324,7 @@
 					</dl>
 					<dl>
 						<dt>상환계좌</dt>
-						<dd id="deposit">모름</dd>
+						<dd id="deposit"></dd>
 					</dl>
 					<dl>
 						<dt>스마트출금 위치</dt>
@@ -367,13 +367,13 @@
 						<div class="cmt_textarea">
 							<textarea id="contentsText" placeholder="타인의 권리를 침해하거나 명예를 훼손하는 댓글은 관련 법률에 의해 제재를 받을 수 있습니다."></textarea>
 							<div class="opt_area">
-								<div class="add_wrap">
+								<!--<div class="add_wrap">
 									<label for="camera">
 										<i class="camera"></i>
 										<input type="file" id="camera">
 									</label>
 									<button type="button" class="emg"></button>
-								</div>
+								</div>-->
 								<div class="btn_wrap">
 									<button class="btn" id="setComm"><span>등록</span></button>
 								</div>

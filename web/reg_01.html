@@ -159,9 +159,9 @@
 					<div class="group">
 						<p class="tit">스마트출금위치</p>
 						<div class="inpt_wrap inpt_btn">
-							<input type="text" placeholder="스마트출금위치">
+							<input type="text" name="smart_withdraw_text" placeholder="스마트출금위치">
 							<div class="btn_wrap">
-								<button class="btn bg_bk"><span>추가</span></button>
+								<button class="btn bg_bk" onclick="smartWithdraw()"><span>추가</span></button>
 							</div>
 						</div>
 					</div>
@@ -239,6 +239,47 @@
 	function regWrite(){
 		commonRegWrite("001");
 	}
+	function smartWithdraw() {
+		const originalInput = document.querySelector('input[name="smart_withdraw_text"]');
+		if (nvl(originalInput.value) == '') {
+			alert('스마트출금위치를 입력해주세요.');
+			return;
+		}
+
+		// 새로운 입력 요소를 생성합니다.
+		var newInputDiv = document.createElement("div");
+		newInputDiv.className = "inpt_wrap inpt_btn";
+		newInputDiv.style.marginTop = "2px";
+
+		var newInput = document.createElement("input");
+		newInput.type = "text";
+		newInput.name = "smart_withdraw_text";
+		newInput.placeholder = "스마트출금위치";
+		newInput.value = originalInput.value;
+		originalInput.value = '';
+
+		var newBtnWrap = document.createElement("div");
+		newBtnWrap.className = "btn_wrap";
+
+		var newButton = document.createElement("button");
+		newButton.className = "btn bg_bk";
+		newButton.innerHTML = "<span>삭제</span>";
+		newButton.addEventListener("click", function() {
+			// 새로 추가된 버튼을 클릭했을 때 실행되는 함수
+			newInputDiv.remove(); // 새로운 요소를 삭제합니다.
+		});
+
+		// 새로운 요소들을 적절한 위치에 추가합니다.
+		newBtnWrap.appendChild(newButton);
+		newInputDiv.appendChild(newInput);
+		newInputDiv.appendChild(newBtnWrap);
+
+		// 추가된 요소를 기존 요소 뒤에 추가합니다.
+		var existingElement = document.querySelector('.inpt_wrap.inpt_btn');
+		existingElement.parentNode.insertBefore(newInputDiv, existingElement.nextSibling);
+	}
+
+
 
 
 

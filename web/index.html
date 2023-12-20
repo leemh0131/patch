@@ -61,6 +61,7 @@
 						}
 						if (nvl(res.map.ES_Q0142) != '') {
 							$("#ES_Q0009").empty();
+							res.map.ES_Q0142.sort((a, b) => a.CODE.localeCompare(b.CODE));
 							res.map.ES_Q0142.forEach((item) => {
 								let option = `<option value="${item.CODE}">${item.NAME}</option>`;
 								$("#ES_Q0009").append(option);

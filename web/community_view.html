@@ -21,6 +21,134 @@
 			gtag('js', new Date());
 
 			gtag('config', 'G-43DNNPPKWP');
+
+
+			let moreBtnCount = 1;
+			let urlParams = new URLSearchParams(location.search);
+
+			let seq = nvl(urlParams.get('seq'));
+
+			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanCommunityDetail', {SEQ: seq})
+			.then((res) => {
+				if (nvl(res.map.item) != '') {
+					item(res.map.item);
+				}
+				if (nvl(res.map.comm_list) != '') {
+					comm_list(res.map.comm_list);
+				} else {
+					$('#comm_count').html(0);
+				}
+			})
+			.catch((err) => {
+				alert("네트워크 오류가 발생!!.");
+			}).finally(function () {
+				$('.user_slide').length && userSlide();
+				$('.main_user_slide').length && mainUserSlide();
+			});
+
+			$("#moreBtn").on("click", search);
+
+			$("#setComm").on("click", setComm);
+
+			function item(item) {
+				$('#title').html(item.TITLE);
+				$('#contentss').html(item.CONTENTS);
+			}
+
+			function comm_list(list) {
+				var pe = document.getElementById('cmt_list');
+				$('#comm_count').html(list.length);
+				list.forEach(function (data) {
+					var listItem = document.createElement("li");
+					var figure = document.createElement("figure");
+					figure.className = "img";
+
+					var img = document.createElement("img");
+					img.src = "assets/images/profile.png";
+					img.alt = "프로필";
+					figure.appendChild(img);
+
+					var textWrap = document.createElement("div");
+					textWrap.className = "txt_wrap";
+
+					var infoWrap = document.createElement("div");
+					infoWrap.className = "info_wrap";
+
+					var idParagraph = document.createElement("p");
+					idParagraph.className = "id";
+					idParagraph.textContent = data.NICK_NM;
+
+					var dateSpan = document.createElement("span");
+					dateSpan.className = "date";
+					dateSpan.textContent = changeDataFormat(data.WRITE_DATE, 'date');
+
+					var replyLink = document.createElement("a");
+					replyLink.href = "#";
+					replyLink.textContent = "답글";
+
+					var reportLink = document.createElement("a");
+					reportLink.href = "#";
+					reportLink.textContent = "신고";
+
+					infoWrap.appendChild(idParagraph);
+					infoWrap.appendChild(dateSpan);
+					infoWrap.appendChild(replyLink);
+					infoWrap.appendChild(reportLink);
+
+					var commentParagraph = document.createElement("p");
+					commentParagraph.className = "comment";
+					commentParagraph.textContent = data.CONTENTS;
+
+					textWrap.appendChild(infoWrap);
+					textWrap.appendChild(commentParagraph);
+					listItem.appendChild(figure);
+					listItem.appendChild(textWrap);
+
+					pe.appendChild(listItem);
+				})
+			}
+
+			function setComm() {
+				let nickNm = $('#nickNm').val();
+				let password = $('#password').val();
+				let contents = $('#contentsText').val();
+
+				if (nvl(nickNm) == '') {
+					alert("닉네임을 입력해주세요")
+					return;
+				}
+				if (nvl(password) == '') {
+					alert("비밀번호를 입력해주세요")
+					return;
+				}
+				if (nvl(contents) == '') {
+					alert("내용을 입력해주세요")
+					return;
+				}
+
+				postData('http://117.52.84.88:8080/api/web/v1/setPrivateLoanPlDmComm', {DM_CD: seq, PARENT_CD: '', NICK_NM: nickNm, PASSWORD: password, CONTENTS: contents})
+				.then((res) => {
+					location.reload();
+				})
+				.catch((err) => {
+					alert("네트워크 오류가 발생!!.");
+				});
+			}
+
+			function search() {
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmCommList', {DM_CD: seq, MORE_BTN_COUNT: moreBtnCount})
+						.then((res) => {
+							if (nvl(res.map.list, '') != '') {
+								comm_list(res.map.list);
+							} else {
+								alert("마지막 페이지 입니다.");
+							}
+						})
+						.catch((err) => {
+							alert("네트워크 오류가 발생!!.");
+						});
+				moreBtnCount++;
+			}
 		});
 	</script>
 	<title>불법사채 DB검색 및 신고포털-사채패치</title>
@@ -90,33 +218,22 @@
 				<div class="location">
 					<ul>
 						<li>
-							<a href="#" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
+							<a href="/index.html" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
 						</li>
 						<li>
-							<a href="#"><span>커뮤니티</span></a>
+							<a href="/community_list.html"><span>커뮤니티</span></a>
 						</li>
 					</ul>
 				</div>
 
 				<!-- 상세 -->
 				<div class="detail_wrap">
-					<p class="detail_tit">
-						갑대리에게 피해를 당했습니다.<br>같이 대응하고 싶습니다.
+					<p class="detail_tit" id="title">
+
 					</p>
 					<!-- 관리자등록 -->
 					<div class="view_ui">
-						<p class="txt">
-							올해 2019년 3월 26일 날 국민은행 체크카드 양도 대출 사기 (보이스피싱 사기) 를 당하였습니다
-							<br>3월 달 당시 그 대출업자 행세하는 보이스피싱 업자 사기꾼은 저에게 대출 기간 동안 원금과 이자를 저의 안쓰는 체크카드에 납부해야 한다면서 말을 했고요
-							<br>
-							<br>저는 그 말에 속아서 체크카드를 보내주었고 체크카드 비밀번호를 알려주었습니다
-							<br>하지만 다행히도 피해자 분께서 보내신 피해 금액 3,300,000원 중 단 한푼 1원도 빠져나가지 않았습니다
-							<br>
-							<br>피해자 분께서 2019년 8월 28일 날 저의 국민은행 지급정지 요청 + 경찰서 신고를 하였고 현재 지급정지 상태고 경찰서에서는 아직 연락이 안 된 상태입니다
-							<br>제가 쓰고 있는 은행이 국민은행 , 신한은행 , 카카오뱅크 3개 인데 = 국민은행은 지급정지 계좌라 비대면/대면 거래 둘 다 불가능 / 카카오뱅크도 (대면 거래라는 개념 자체가 없으니) 아예 거래 불가능 / 그나마 쓸 수 있는 은행이 신한은행 인데 (은행 창구를 통한) 대면 거래만 가능한 상태입니다
-							<br>
-							<br>그리고 제가 사기죄 누명 쓴 거 기소유예 전과 1건이 있습니다 (작업대출 선불유심칩/통장,체크카드를 보내면 거래 실적을 쌓아 대출을 해주겠다는 내용이었으나 그 사기꾼이 다른 공기계에 저의 선불유심칩을 꽂아서 중고나라에 아이폰 판매 사기를 쳤음)
-							<br>경찰 조사 - 검찰 조사 - 법원 재판 까지.... 동행 및 변호사 수임료 얼마 정도 드나요? 상담하고 싶습니다
+						<p class="txt" id="contentss">
 						</p>
 					</div>
 					<!--// 관리자등록 -->
@@ -127,12 +244,12 @@
 				</div>
 
 				<div class="dt_btn btn_wrap">
-					<a href="#" class="btn btn_bdr">
+					<!--<a href="#" class="btn btn_bdr">
 						<span>수정</span>
 					</a>
 					<a href="#" class="btn btn_bdr">
 						<span>삭제</span>
-					</a>
+					</a>-->
 					<a href="#" class="btn">
 						<span>글쓰기</span>
 					</a>
@@ -156,33 +273,33 @@
 
 				<!-- 댓글 -->
 				<div class="comment_wrap">
-					<p class="cmt_count">댓글 (<em>12</em>) </p>
+					<p class="cmt_count">댓글 (<em id="comm_count"></em>) </p>
 
 					<div class="cmt_form">
 						<div class="cmt_inpt">
-							<input type="text" placeholder="닉네임">
-							<input type="password" placeholder="비밀번호">
+							<input type="text" id="nickNm" placeholder="닉네임" maxlength="10">
+							<input type="password" id="password" placeholder="비밀번호">
 						</div>
 						<div class="cmt_textarea">
-							<textarea placeholder="타인의 권리를 침해하거나 명예를 훼손하는 댓글은 관련 법률에 의해 제재를 받을 수 있습니다."></textarea>
+							<textarea id="contentsText" placeholder="타인의 권리를 침해하거나 명예를 훼손하는 댓글은 관련 법률에 의해 제재를 받을 수 있습니다."></textarea>
 							<div class="opt_area">
-								<div class="add_wrap">
+								<!--<div class="add_wrap">
 									<label for="camera">
 										<i class="camera"></i>
 										<input type="file" id="camera">
 									</label>
 									<button type="button" class="emg"></button>
-								</div>
+								</div>-->
 								<div class="btn_wrap">
-									<button class="btn"><span>등록</span></button>
+									<button class="btn" id="setComm"><span>등록</span></button>
 								</div>
 							</div>
 						</div>
 					</div>
 
 					<div class="cmt_list">
-						<ul>
-							<li>
+						<ul id="cmt_list">
+							<!--<li>
 								<figure class="img">
 									<img src="assets/images/profile.png" alt="프로필">
 								</figure>
@@ -209,7 +326,7 @@
 												추심 피해가 너무 심각합니다.
 											</p>
 
-											<!-- 2023-11-22 추가 -->
+											&lt;!&ndash; 2023-11-22 추가 &ndash;&gt;
 											<a href="#" class="cmt_write">댓글쓰기</a>
 										</li>
 										<li>
@@ -223,19 +340,19 @@
 												추심 피해가 너무 심각합니다.
 											</p>
 
-											<!-- 2023-11-22 추가 -->
+											&lt;!&ndash; 2023-11-22 추가 &ndash;&gt;
 											<a href="#" class="cmt_write">댓글쓰기</a>
 										</li>
 									</ul>
 
-									<!-- 2023-11-22 추가 -->
+									&lt;!&ndash; 2023-11-22 추가 &ndash;&gt;
 									<div class="inpt_cmt">
 										<input type="text" placeholder="댓글 내용을 입력해주세요.">
 										<div class="btn_wrap">
 											<button class="btn"><span>등록</span></button>
 										</div>
 									</div>
-									<!--// 2023-11-22 추가 -->
+									&lt;!&ndash;// 2023-11-22 추가 &ndash;&gt;
 								</div>
 							</li>
 							<li>
@@ -301,12 +418,12 @@
 										추심 피해가 너무 심각합니다.
 									</p>
 								</div>
-							</li>
+							</li>-->
 						</ul>
 					</div>
 
 					<div class="btn_wrap">
-						<button class="btn btn_more">
+						<button class="btn btn_more" id="moreBtn">
 							<span>더보기</span>
 						</button>
 					</div>
