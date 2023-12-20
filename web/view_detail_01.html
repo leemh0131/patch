@@ -13,28 +13,37 @@
 	<script type="text/javascript" src="./assets/js/lib/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
 	<script type="text/javascript" src="./assets/js/common.js"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-43DNNPPKWP"></script>
+
 	<title>불법사채 DB검색 및 신고포털-사채패치</title>
 	<script>
 		$(document).ready(function() {
+			/*구글 애널리틱스 추가*/
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'G-43DNNPPKWP');
+
 			let moreBtnCount = 1;
 			let urlParams = new URLSearchParams(location.search);
 
 			let dmCd = nvl(urlParams.get('dmCd'));
 			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMDetail', {DM_CD: dmCd})
-			.then((res) => {
-				if (nvl(res.map.item) != '') {
-					item(res.map.item, res.map.item_detail);
-				}
-				if (nvl(res.map.list) != '') {
-					list(res.map.list);
-				}
-				if (nvl(res.map.comm_list) != '') {
-					comm_list(res.map.comm_list);
-				}
-			})
-			.catch((err) => {
-				alert("네트워크 오류가 발생!!.");
-			}).finally(function () {
+					.then((res) => {
+						if (nvl(res.map.item) != '') {
+							item(res.map.item, res.map.item_detail);
+						}
+						if (nvl(res.map.list) != '') {
+							list(res.map.list);
+						}
+						if (nvl(res.map.comm_list) != '') {
+							comm_list(res.map.comm_list);
+						}
+					})
+					.catch((err) => {
+						alert("네트워크 오류가 발생!!.");
+					}).finally(function () {
 				$('.user_slide').length && userSlide();
 				$('.main_user_slide').length && mainUserSlide();
 			});
@@ -62,26 +71,26 @@
 				}
 
 				postData('http://117.52.84.88:8080/api/web/v1/setPrivateLoanPlDmComm', {DM_CD: dmCd, PARENT_CD: '', NICK_NM: nickNm, PASSWORD: password, CONTENTS: contents})
-				.then((res) => {
-					location.reload();
-				})
-				.catch((err) => {
-					alert("네트워크 오류가 발생!!.");
-				});
+						.then((res) => {
+							location.reload();
+						})
+						.catch((err) => {
+							alert("네트워크 오류가 발생!!.");
+						});
 			}
 
 			function search() {
 				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmCommList', {DM_CD: dmCd, MORE_BTN_COUNT: moreBtnCount})
-				.then((res) => {
-					if (nvl(res.map.list, '') != '') {
-						comm_list(res.map.list);
-					} else {
-						alert("마지막 페이지 입니다.");
-					}
-				})
-				.catch((err) => {
-					alert("네트워크 오류가 발생!!.");
-				});
+						.then((res) => {
+							if (nvl(res.map.list, '') != '') {
+								comm_list(res.map.list);
+							} else {
+								alert("마지막 페이지 입니다.");
+							}
+						})
+						.catch((err) => {
+							alert("네트워크 오류가 발생!!.");
+						});
 				moreBtnCount++;
 			}
 
@@ -154,7 +163,7 @@
 				if (nvl(detail) != '') {
 					let html = '';
 					for (let i = 0; i < detail.length; i++) {
-						html += detail[i].BANK_NM + ':' + detail[i].NO_DEPOSIT + ' ';
+						html += detail[i].BANK_NM + ':' + changeDataMaskFormat(detail[i].NO_DEPOSIT, 'deposit') + ' ';
 					}
 					$('#deposit').html(html);
 				} else {

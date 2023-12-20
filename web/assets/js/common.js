@@ -507,4 +507,7 @@ function changeDataMaskFormat(value, type) {
 	if (type == 'phone') {
 		return value.replace(/(..)$/, "**");
 	}
+	if (type == 'deposit') {
+		return value.replace(/(..)$/, "****");
+	}
 }

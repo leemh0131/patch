@@ -13,7 +13,17 @@
 	<script type="text/javascript" src="./assets/js/lib/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
 	<script type="text/javascript" src="./assets/js/common.js"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-43DNNPPKWP"></script>
 	<title>불법사채 DB검색 및 신고포털-사채패치</title>
+	<script>
+		$(document).ready(function() {
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'G-43DNNPPKWP');
+		});
+	</script>
 </head>
 <body>
 <!-- #WRAP -->
@@ -140,7 +150,7 @@
 
 							</select>
 							<input type="text" class="acc_num" id="no_deposit" placeholder="계좌번호를 입력하세요.">
-							<input type="text" id="nm_depositor" placeholder="입금자명">
+							<input type="text" id="nm_depositor" placeholder="예금주명">
 							<div class="btn_wrap">
 								<button onclick="depositAdd()" class="btn bg_bk"><span>추가</span></button>
 							</div>
