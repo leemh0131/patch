@@ -214,8 +214,7 @@
 
 					$('#list').append(listItem);
 				});
-				moreBtnCount++;
-			} else {
+			} else if(moreBtnCount != 1) {
 				alert("마지막 페이지 입니다.");
 			}
 
@@ -224,6 +223,6 @@
 			alert("네트워크 오류가 발생!!.");
 			console.error('Error sending/receiving data:', err); // 데이터 전송 또는 수신 중 오류 발생 시 메시지 출력
 		});
-
+		moreBtnCount++;
 	}
 </script>

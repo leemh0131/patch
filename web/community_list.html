@@ -33,28 +33,28 @@
 
 			function search() {
 				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanCommunityPaging', {COMPANY_CD: "1000", MORE_BTN_COUNT: moreBtnCount, COMMUNITY_ST: "14", COMMUNITY_TP: "03"})
-						.then((res) => {
-							if (nvl(res.map.list, '') != '') {
-								list(res.map.list);
-							} else if(moreBtnCount != 1) {
-								alert("마지막 페이지 입니다.");
-							}
-						})
-						.catch((err) => {
-							alert("네트워크 오류가 발생!!.");
-						});
+				.then((res) => {
+					if (nvl(res.map.list, '') != '') {
+						list(res.map.list);
+					} else if(moreBtnCount != 1) {
+						alert("마지막 페이지 입니다.");
+					}
+				})
+				.catch((err) => {
+					alert("네트워크 오류가 발생!!.");
+				});
 				moreBtnCount++;
 			}
 
 			function list(slideData) {
 				var commList = document.getElementById('comm_list');
 
-				slideData.forEach(function (data) {
+				slideData.forEach(function (data, index) {
 					var liElement = document.createElement('li');
 
 					var seqDivElement = document.createElement('div');
 					seqDivElement.className = 'comm_num';
-					seqDivElement.textContent = data.SEQ;
+					seqDivElement.textContent = (index+1);
 
 					var titDivElement = document.createElement('div');
 					titDivElement.className = 'comm_tit';
