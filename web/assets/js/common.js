@@ -348,7 +348,6 @@ function commonRegWrite(dm_type){
 	let use_yn = "Y";
 
 
-	//let apiUrl = "http://localhost:8080/api/web/v1/regWrite";
 
 
 	let apiUrl = "http://117.52.84.88:8080/api/web/v1/regWrite";

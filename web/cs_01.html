@@ -90,15 +90,15 @@
 				<div class="location">
 					<ul>
 						<li>
-							<a href="#" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
+							<a href="/index.html" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
 						</li>
 						<li>
-							<a href="#"><span>고객센터</span></a>
+							<a href="/cs_01.html"><span>고객센터</span></a>
 						</li>
 					</ul>
 				</div>
 				<div class="sub_tit_area">
-					<h2>고객센터</h2>
+					<h2>공지사항</h2>
 				</div>
 
 				<!-- 고객센터 -->
@@ -148,7 +148,6 @@
 	let index = 1;
 	$("#moreBtn").on("click", search);
 	function search() {
-		//let apiUrl = "http://localhost:8080/api/web/v1/getPrivateNotice";
 		let apiUrl = "http://117.52.84.88:8080/api/web/v1/getPrivateNotice";
 		let param = {COMPANY_CD : "1000", BOARD_TYPE : "04", LIMIT : 10, OFFSET : moreBtnCount};
 		postData(apiUrl, param)

@@ -32,7 +32,7 @@
 			$("#moreBtn").on("click", search);
 
 			function search() {
-				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanCommunityPaging', {MORE_BTN_COUNT: moreBtnCount})
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanCommunityPaging', {COMPANY_CD: "1000", MORE_BTN_COUNT: moreBtnCount, COMMUNITY_ST: "14", COMMUNITY_TP: "03"})
 						.then((res) => {
 							if (nvl(res.map.list, '') != '') {
 								list(res.map.list);
