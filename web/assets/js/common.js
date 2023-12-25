@@ -162,6 +162,10 @@ function muCenter(target, num, type) { //탭 가운데 이동
 		listWidth += $(this).outerWidth();
 	})
 
+	if(nvl(targetPos) == ''){
+		return;
+	}
+
 	var selectTargetPos = targetPos.left + target.outerWidth() / 2;
 	if (selectTargetPos <= boxHalf) { // left
 		pos = 0;

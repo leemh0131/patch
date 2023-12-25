@@ -52,36 +52,8 @@
 
 			$("#moreBtn").on("click", search);
 
-			$("#setComm").on("click", setComm);
-
-			function setComm() {
-				let nickNm = $('#nickNm').val();
-				let password = $('#password').val();
-				let contents = $('#contentsText').val();
-
-				if (nvl(nickNm) == '') {
-					alert("닉네임을 입력해주세요")
-					return;
-				}
-				if (nvl(password) == '') {
-					alert("비밀번호를 입력해주세요")
-					return;
-				}
-				if (nvl(contents) == '') {
-					alert("내용을 입력해주세요")
-					return;
-				}
-
-				postData('http://117.52.84.88:8080/api/web/v1/setPrivateLoanPlDmComm', {DM_CD: dmCd, PARENT_CD: '', NICK_NM: nickNm, PASSWORD: password, CONTENTS: contents})
-				.then((res) => {
-					location.reload();
-				})
-				.catch((err) => {
-					alert("네트워크 오류가 발생!!.");
-				});
-			}
-
 			function search() {
+				//postData('http://localhost:8080/api/web/v1/getPrivateLoanPlDmCommList', {DM_CD: dmCd, MORE_BTN_COUNT: moreBtnCount})
 				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmCommList', {DM_CD: dmCd, MORE_BTN_COUNT: moreBtnCount})
 						.then((res) => {
 							if (nvl(res.map.list, '') != '') {
@@ -99,55 +71,112 @@
 			function comm_list(list) {
 				var pe = document.getElementById('cmt_list');
 				$('#comm_count').html(list.length);
+
+				//댓글먼저
+
+				let child = [];
+
 				list.forEach(function (data) {
-					var listItem = document.createElement("li");
-					var figure = document.createElement("figure");
-					figure.className = "img";
 
-					var img = document.createElement("img");
-					img.src = "assets/images/profile.png";
-					img.alt = "프로필";
-					figure.appendChild(img);
+					if(nvl(data.PARENT_CD) != '') {
+						child.push(data);
+					} else {
+						var listItem = document.createElement("li");
+						var figure = document.createElement("figure");
+						figure.className = "img";
 
-					var textWrap = document.createElement("div");
-					textWrap.className = "txt_wrap";
+						var img = document.createElement("img");
+						img.src = "assets/images/profile.png";
+						img.alt = "프로필";
+						figure.appendChild(img);
 
-					var infoWrap = document.createElement("div");
-					infoWrap.className = "info_wrap";
+						var textWrap = document.createElement("div");
+						textWrap.className = "txt_wrap";
+						textWrap.id = data.COMM_CD;
 
-					var idParagraph = document.createElement("p");
-					idParagraph.className = "id";
-					idParagraph.textContent = data.NICK_NM;
+						var infoWrap = document.createElement("div");
+						infoWrap.className = "info_wrap";
 
-					var dateSpan = document.createElement("span");
-					dateSpan.className = "date";
-					dateSpan.textContent = changeDataFormat(data.WRITE_DATE, 'date');
+						var idParagraph = document.createElement("p");
+						idParagraph.className = "id";
+						idParagraph.textContent = data.NICK_NM;
 
-					var replyLink = document.createElement("a");
-					replyLink.href = "#";
-					replyLink.textContent = "답글";
+						var dateSpan = document.createElement("span");
+						dateSpan.className = "date";
+						dateSpan.textContent = changeDataFormat(data.WRITE_DATE, 'date');
 
-					var reportLink = document.createElement("a");
-					reportLink.href = "#";
-					reportLink.textContent = "신고";
+						var replyLink = document.createElement("a");
+						/*replyLink.href = "#";*/
+						replyLink.className = 'reply';
+						replyLink.textContent = "답글";
 
-					infoWrap.appendChild(idParagraph);
-					infoWrap.appendChild(dateSpan);
-					infoWrap.appendChild(replyLink);
-					infoWrap.appendChild(reportLink);
+						var reportLink = document.createElement("a");
+						reportLink.href = "#";
+						reportLink.textContent = "신고";
 
-					var commentParagraph = document.createElement("p");
-					commentParagraph.className = "comment";
-					commentParagraph.textContent = data.CONTENTS;
+						infoWrap.appendChild(idParagraph);
+						infoWrap.appendChild(dateSpan);
+						infoWrap.appendChild(replyLink);
+						infoWrap.appendChild(reportLink);
 
-					textWrap.appendChild(infoWrap);
-					textWrap.appendChild(commentParagraph);
-					listItem.appendChild(figure);
-					listItem.appendChild(textWrap);
+						var commentParagraph = document.createElement("p");
+						commentParagraph.className = "comment";
+						commentParagraph.textContent = data.CONTENTS;
 
-					pe.appendChild(listItem);
+						textWrap.appendChild(infoWrap);
+						textWrap.appendChild(commentParagraph);
+						listItem.appendChild(figure);
+						listItem.appendChild(textWrap);
+
+						pe.appendChild(listItem);
+					}
+
+
 				})
+
+				//답글
+				child.forEach(function (data) {
+					if(nvl(data.PARENT_CD) == '') return;
+					let parents = $('#' + data.PARENT_CD)[0];
+					// ul 요소 생성
+					var ulElement = document.createElement("ul");
+					// li 요소 생성
+					var liElement = document.createElement("li");
+					// div 요소 생성 (info_wrap 클래스)
+					var divInfoWrap = document.createElement("div");
+					divInfoWrap.className = "info_wrap";
+					// p 요소 생성 (id 클래스)
+					var pId = document.createElement("p");
+					pId.className = "id";
+					pId.textContent = data.NICK_NM;
+					// span 요소 생성 (date 클래스)
+					var spanDate = document.createElement("span");
+					spanDate.className = "date";
+					spanDate.textContent = changeDataFormat(data.WRITE_DATE, 'date');
+					// a 요소 생성 (신고)
+					var aReport = document.createElement("a");
+					aReport.href = "#";
+					aReport.textContent = "신고";
+					// p 요소 생성 (comment 클래스)
+					var pComment = document.createElement("p");
+					pComment.className = "comment";
+					pComment.textContent = data.CONTENTS;
+
+					// div.info_wrap에 p.id, span.date, a(답글), a(신고) 추가
+					divInfoWrap.appendChild(pId);
+					divInfoWrap.appendChild(spanDate);
+					divInfoWrap.appendChild(aReport);
+
+					// li 요소에 div.info_wrap, p.comment 추가
+					liElement.appendChild(divInfoWrap);
+					liElement.appendChild(pComment);
+
+					// ul 요소에 li 요소 추가
+					ulElement.appendChild(liElement);
+					parents.append(ulElement);
+				});
 			}
+
 
 			function item(item, detail) {
 				$('#comp_nm').html(item.COMP_NM);
@@ -222,6 +251,122 @@
 				})
 			}
 		});
+
+		$(document).on("click", ".reply", function() {
+			// 클릭된 요소에 대한 작업 수행
+			var clickedReply = $(this).text();
+			$(".txt_wrap .reply-div").remove();
+
+			// 클릭된 요소의 부모인 txt_wrap을 찾습니다.
+			var txtWrap = $(this).closest('.txt_wrap');
+
+			var parent = txtWrap[0].id;
+
+			// textWrap 요소 생성
+			var textWrap = document.createElement("div");
+			textWrap.className = "reply-div";
+
+			// inptCmt 요소 생성
+			var inptCmt = document.createElement("div");
+			inptCmt.className = "inpt_cmt";
+
+			// inptCmt2 요소 생성
+			var inptCmt2 = document.createElement("div");
+			inptCmt2.className = "inpt_cmt";
+
+			// inptCmt의 하위에 input 요소 추가
+			var inputNickName = document.createElement("input");
+			inputNickName.type = "text";
+			inputNickName.id = "cmtNickNm";
+			inputNickName.placeholder = "닉네임";
+			inputNickName.maxLength = "10";
+			/*inputNickName.value = parent;*/
+			inptCmt.appendChild(inputNickName);
+
+			var inputPassword = document.createElement("input");
+			inputPassword.type = "password";
+			inputPassword.id = "cmtPassword";
+			inputPassword.placeholder = "비밀번호";
+			inptCmt.appendChild(inputPassword);
+			inptCmt.appendChild(document.createElement("br"));
+
+			// inptCmt2의 하위에 input 요소와 button 요소 추가
+			var inputContents = document.createElement("input");
+			inputContents.type = "text";
+			inputContents.id = "cmtContents";
+			inputContents.placeholder = "댓글 내용을 입력해주세요.";
+			inptCmt2.appendChild(inputContents);
+
+			var divBtnWrap = document.createElement("div");
+			divBtnWrap.className = "btn_wrap";
+
+			var btn = document.createElement("button");
+			btn.className = "btn";
+			btn.textContent = "등록";
+			btn.id = "setReply"
+			btn.setAttribute('parent', parent);
+			btn.style.color = "white";
+
+			divBtnWrap.appendChild(btn);
+			inptCmt2.appendChild(divBtnWrap);
+
+			// textWrap에 inptCmt와 inptCmt2를 자식 요소로 추가
+			textWrap.appendChild(inptCmt);
+			textWrap.appendChild(inptCmt2);
+
+			// txt_wrap에 추가된 HTML 삽입
+			txtWrap.append(textWrap);
+		});
+
+		$(document).on("click", "#setComm", function() {
+			setComm('basic', '');
+		});
+
+		$(document).on("click", "#setReply", function() {
+			setComm('reply', $(this).attr('parent'));
+		});
+
+		function setComm(chk, parent) {
+
+			let urlParams = new URLSearchParams(location.search);
+			let dmCd = nvl(urlParams.get('dmCd'));
+
+			let nickNm;
+			let password;
+			let contents;
+
+			if(chk == 'basic'){
+				nickNm = $('#nickNm').val();
+				password = $('#password').val();
+				contents = $('#contentsText').val();
+			} else {
+				nickNm = $('#cmtNickNm').val();
+				password = $('#cmtPassword').val();
+				contents = $('#cmtContents').val();
+			}
+
+			if (nvl(nickNm) == '') {
+				alert("닉네임을 입력해주세요")
+				return;
+			}
+			if (nvl(password) == '') {
+				alert("비밀번호를 입력해주세요")
+				return;
+			}
+			if (nvl(contents) == '') {
+				alert("내용을 입력해주세요")
+				return;
+			}
+
+			postData('http://117.52.84.88:8080/api/web/v1/setPrivateLoanPlDmComm', {DM_CD: dmCd, PARENT_CD: nvl(parent), NICK_NM: nickNm, PASSWORD: password, CONTENTS: contents})
+					.then((res) => {
+						location.reload();
+					})
+					.catch((err) => {
+						alert("네트워크 오류가 발생!!.");
+					});
+		}
+
 	</script>
 </head>
 <body>
@@ -383,70 +528,15 @@
 
 					<div class="cmt_list">
 						<ul id="cmt_list">
-							<!--<li>
-								<figure class="img">
-									<img src="assets/images/profile.png" alt="프로필">
-								</figure>
-								<div class="txt_wrap">
-									<div class="info_wrap">
-										<p class="id">김****</p>
-										<span class="date">2022-04-30 15:00</span>
-										<a href="#">답글</a>
-										<a href="#">신고</a>
-									</div>
-									<p class="comment">
-										추심 피해가 너무 심각합니다.
-									</p>
 
-									&lt;!&ndash;<ul>
-										<li>
-											<div class="info_wrap">
-												<p class="id">kimsu</p>
-												<span class="date">2022-04-30 15:00</span>
-												<a href="#">답글</a>
-												<a href="#">신고</a>
-											</div>
-											<p class="comment">
-												추심 피해가 너무 심각합니다.
-											</p>
-
-											&lt;!&ndash; 2023-11-22 추가 &ndash;&gt;
-											<a href="#" class="cmt_write">댓글쓰기</a>
-										</li>
-										<li>
-											<div class="info_wrap">
-												<p class="id">kimsu</p>
-												<span class="date">2022-04-30 15:00</span>
-												<a href="#">답글</a>
-												<a href="#">신고</a>
-											</div>
-											<p class="comment">
-												추심 피해가 너무 심각합니다.
-											</p>
-
-											&lt;!&ndash; 2023-11-22 추가 &ndash;&gt;
-											<a href="#" class="cmt_write">댓글쓰기</a>
-										</li>
-									</ul>&ndash;&gt;
-
-									&lt;!&ndash; 2023-11-22 추가 &ndash;&gt;
-									&lt;!&ndash;<div class="inpt_cmt">
-										<input type="text" placeholder="댓글 내용을 입력해주세요.">
-										<div class="btn_wrap">
-											<button class="btn"><span>등록</span></button>
-										</div>
-									</div>&ndash;&gt;
-									&lt;!&ndash;// 2023-11-22 추가 &ndash;&gt;
-								</div>
-							</li>-->
 						</ul>
 					</div>
 
-					<div class="btn_wrap">
+					<!--<div class="btn_wrap">
 						<button class="btn btn_more" id="moreBtn">
 							<span>더보기</span>
 						</button>
-					</div>
+					</div>-->
 				</div>
 				<!--// 댓글 -->
 			</div>
