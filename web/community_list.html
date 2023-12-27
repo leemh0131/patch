@@ -62,7 +62,7 @@
 					var aElement = document.createElement('a');
 					aElement.href = '/community_view.html?seq=' + data.SEQ;
 					aElement.title = data.TITLE;
-					aElement.textContent = data.TITLE;
+					aElement.textContent = data.TITLE + " (" + nvl(data.COMM_CUT, "0") + ")";
 
 					var authorDivElement = document.createElement('div');
 					authorDivElement.className = 'comm_author';
@@ -70,7 +70,7 @@
 
 					var dateDivElement = document.createElement('div');
 					dateDivElement.className = 'comm_date';
-					dateDivElement.textContent = changeDataFormat(data.DTS, 'date');
+					dateDivElement.textContent = changeDataFormat(data.DTS, 'date') + "  " + nvl(data.HIT, "0");
 
 					liElement.appendChild(seqDivElement);
 					titDivElement.appendChild(aElement);

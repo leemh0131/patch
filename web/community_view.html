@@ -29,6 +29,7 @@
 			let seq = nvl(urlParams.get('seq'));
 
 			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanCommunityDetail', {SEQ: seq})
+			//postData('http://localhost:8080/api/web/v1/getPrivateLoanCommunityDetail', {SEQ: seq})
 			.then((res) => {
 				if (nvl(res.map.item) != '') {
 					item(res.map.item);
