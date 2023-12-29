@@ -21,7 +21,82 @@
 			gtag('js', new Date());
 
 			gtag('config', 'G-43DNNPPKWP');
+
+			let moreBtnCount = 0;
+			search();
+
+			$("#moreBtn").on("click", search);
+
+			function search(param) {
+
+				let L_JOB_ZONE = $('.on').find('span').text();
+
+				if(L_JOB_ZONE == '전체'){
+					L_JOB_ZONE = '';
+				}
+
+				if(param == 'reset'){
+					$('#job').empty();
+					moreBtnCount = 0;
+				}
+
+				//postData('http://localhost:8080/api/web/v1/getPrivateJobList', {COMPANY_CD: "1000", LIMIT : 9, OFFSET : moreBtnCount, L_JOB_ZONE : L_JOB_ZONE, IMG_URL : "http://117.52.84.88:8080"})
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateJobList', {COMPANY_CD: "1000", LIMIT : 9, OFFSET : moreBtnCount, L_JOB_ZONE : L_JOB_ZONE, IMG_URL : "http://117.52.84.88:8080"})
+						.then((res) => {
+							res = res.map;
+
+							if (nvl(res.list, '') != '') {
+								res.list.forEach((item) => {
+									// 새로운 리스트 아이템 생성
+									var listItem = $('<li>');
+
+									var adWrap = $('<div>')
+											.addClass('ad_wrap');
+									var anchor = $('<a>')
+											.attr('href', '#');
+									var image = $('<img>')
+											.attr('src', item.IMG_URL)
+											.attr('onError', "this.src='assets/images/bg_ad.png'")
+											.attr('alt', 'AD');
+									var figure = $('<figure>')
+											.addClass('img')
+											.append(image);
+									var txtWrap = $('<div>')
+											.addClass('txt_wrap');
+									var nameText = $('<p>')
+											.addClass('name')
+											.text(item.JOB_NM);
+									var descriptionText = $('<p>')
+											.addClass('txt')
+											.html(item.JOB_ZONE_NM + "에서<br>" + item.JOB_TEXT);
+									var telText = $('<p>')
+											.addClass('tel')
+											.text(item.TEL_NO);
+									txtWrap.append(nameText, descriptionText, telText);
+									anchor.append(figure, txtWrap);
+									adWrap.append(anchor);
+									listItem.append(adWrap);
+									$('#job').append(listItem); // ul에 리스트 아이템 추가
+								});
+								moreBtnCount++;
+
+							} else if(moreBtnCount != 1) {
+								alert("조회된 일자리가 없습니다.");
+							}
+						})
+						.catch((err) => {
+							alert("네트워크 오류가 발생!!.");
+						});
+			}
+
+			$(document).on('click', '.loc_tab ul li button', function(e) {
+				search('reset');
+			});
+
 		});
+
+
+
 	</script>
 	<title>불법사채 DB검색 및 신고포털-사채패치</title>
 </head>
@@ -43,8 +118,8 @@
 					<li><a href="view_list_01.html" title="불법대부업"><span>불법대부업</span></a></li>
 					<li><a href="view_list_02.html" title="기타금융사기"><span>기타금융사기</span></a></li>
 					<li><a href="community_list.html" title="커뮤니티"><span>커뮤니티</span></a></li>
-					<!--<li><a href="cs_list.html" title="법률상담문의"><span>법률상담문의</span></a></li>
-                    <li><a href="job_list.html" title="일자리찾기"><span>일자리찾기</span></a></li>-->
+					<!--<li><a href="cs_list.html" title="법률상담문의"><span>법률상담문의</span></a></li>-->
+                    <li><a href="job_list.html" title="일자리찾기"><span>일자리찾기</span></a></li>
 					<li><a href="cs_01.html" title="고객센터"><span>고객센터</span></a></li>
 				</ul>
 			</nav>
@@ -75,8 +150,8 @@
 				<div class="swiper-slide"><a href="/view_list_02.html" title="기타금융사기">기타금융사기</a></div>
 				<div class="swiper-slide"><a href="/community_list.html" title="커뮤니티">커뮤니티</a></div>
 				<div class="swiper-slide"><a href="/cs_01.html" title="고객센터">고객센터</a></div>
-				<!--<div class="swiper-slide"><a href="/cs_list.html" title="법률상담문의">법률상담문의</a></div>
-				<div class="swiper-slide"><a href="/job_list.html" title="일자리찾기">일자리찾기</a></div>-->
+				<!--<div class="swiper-slide"><a href="/cs_list.html" title="법률상담문의">법률상담문의</a></div>-->
+				<div class="swiper-slide"><a href="/job_list.html" title="일자리찾기">일자리찾기</a></div>
 			</div>
 		</div>
 	</div>
@@ -216,181 +291,14 @@
 				</div>
 
 				<div class="cs_li">
-					<ul>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
-						<li>
-							<div class="ad_wrap">
-								<a href="#">
-									<figure class="img">
-										<img src="assets/images/bg_ad.png" alt="AD">
-									</figure>
-									<div class="txt_wrap">
-										<p class="name">가법률사무소</p>
-										<p class="txt">광주/목포/순천/여수/전주/군산에서<br>활동하는 경력의 베테랑 사무소</p>
-										<p class="tel">010-2571-3457</p>
-									</div>
-								</a>
-							</div>
-						</li>
+					<ul id="job">
+
 					</ul>
 				</div>
 
 				<!-- 버튼 -->
 				<div class="btn_wrap">
-					<button class="btn btn_more">
+					<button id="moreBtn" class="btn btn_more">
 						<span>더보기</span>
 					</button>
 				</div>
