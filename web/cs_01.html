@@ -21,6 +21,11 @@
 			gtag('js', new Date());
 
 			gtag('config', 'G-43DNNPPKWP');
+			$("#m_btn_search").on("click", srchBtn);
+
+			function srchBtn() {
+				location.href = '/view_list_03.html?srchKeyword=' + $('#m_srch_keyword').val();
+			}
 		});
 	</script>
 	<title>불법사채 DB검색 및 신고포털-사채패치</title>
@@ -64,7 +69,18 @@
 	<!--// 모바일 사이트 메뉴 -->
 
 	<!-- 검색영역 -->
-	<div class="site_srch_wrap" id="site_srch_wrap"></div>
+	<div class="site_srch_wrap">
+		<div class="srch_inner">
+			<h2>불법대부업 및 금융사기 검색</h2>
+
+			<!-- 검색 input -->
+			<div class="srch">
+				<input type="text" id="m_srch_keyword" placeholder="불법사채업자를 검색하세요.">
+				<button type="submit" id="m_btn_search"><span class="blind">검색</span></button>
+			</div>
+			<!--// 검색 input -->
+		</div>
+	</div>
 	<!--// 검색영역 -->
 
 	<!-- 2023-11-17 서브메뉴추가 -->

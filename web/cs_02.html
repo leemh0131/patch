@@ -21,6 +21,11 @@
 			gtag('js', new Date());
 
 			gtag('config', 'G-43DNNPPKWP');
+			$("#m_btn_search").on("click", srchBtn);
+
+			function srchBtn() {
+				location.href = '/view_list_03.html?srchKeyword=' + $('#m_srch_keyword').val();
+			}
 		});
 	</script>
 	<title>불법사채 DB검색 및 신고포털-사채패치</title>
@@ -65,7 +70,18 @@
 	<!--// 모바일 사이트 메뉴 -->
 
 	<!-- 검색영역 -->
-	<div class="site_srch_wrap" id="site_srch_wrap"></div>
+	<div class="site_srch_wrap">
+		<div class="srch_inner">
+			<h2>불법대부업 및 금융사기 검색</h2>
+
+			<!-- 검색 input -->
+			<div class="srch">
+				<input type="text" id="m_srch_keyword" placeholder="불법사채업자를 검색하세요.">
+				<button type="submit" id="m_btn_search"><span class="blind">검색</span></button>
+			</div>
+			<!--// 검색 input -->
+		</div>
+	</div>
 	<!--// 검색영역 -->
 
 	<!-- 2023-11-17 서브메뉴추가 -->
@@ -144,6 +160,20 @@
 						<a href="cs_02_reg.html" class="btn">
 							<span>글쓰기</span>
 						</a>
+						<a href="cs_02_reg.html" class="btn">
+							<span>글쓰기</span>
+						</a>
+					</div>
+
+					<!-- 비밀번호 입력 모달 창 -->
+					<div id="passwordModal" class="com-modal">
+						<div class="com-modal-content">
+							<label for="passwordInput">비밀번호: </label>
+							<input type="password" id="passwordInput">
+							<button class="com-confirm" onclick="checkPassword()">확인</button>
+							<button class="com-cancel" onclick="closeModal()">취소</button>
+							<input style="display: none;" id="select_seq" value=""/>
+						</div>
 					</div>
 					<!--// 버튼 -->
 				</div>
@@ -167,7 +197,6 @@
 </html>
 
 <script>
-
 	let moreBtnCount = 0;
 	search();
 	let index = 1;
@@ -188,9 +217,9 @@
 
 					// 앵커 요소 생성
 					var anchor = $('<a>')
-							.attr('href', '/cs_02_view.html?seq=' + item.SEQ)
+							.attr('href', 'javascript:void(0);')
+							.attr('onclick', 'openModal("'+item.SEQ+'")')
 							.addClass('ctrl_trg2');
-
 					// 숫자 요소 생성
 					var csNum = $('<div>')
 							.addClass('cs_num')
@@ -224,5 +253,57 @@
 			console.error('Error sending/receiving data:', err); // 데이터 전송 또는 수신 중 오류 발생 시 메시지 출력
 		});
 		moreBtnCount++;
+	}
+
+	// 모달 열기
+	function openModal(seq) {
+		var modal = document.getElementById("passwordModal");
+		modal.style.display = "flex";
+		var passwordInput = document.getElementById("passwordInput");
+		passwordInput.value = "";
+		var selectSeq = document.getElementById("select_seq");
+		selectSeq.value = seq;
+	}
+
+	// 모달 닫기
+	function closeModal() {
+		var modal = document.getElementById("passwordModal");
+		modal.style.display = "none";
+	}
+
+	// 비밀번호 확인
+	function checkPassword() {
+		var passwordInput = document.getElementById("passwordInput");
+		var password = passwordInput.value;
+		var selectSeq = document.getElementById("select_seq");
+
+		if (password === "") {
+			alert("비밀번호를 입력하세요.");
+		} else {
+
+			let apiUrl = "http://117.52.84.88:8080/api/web/v1/checkCommnityPwd";
+			let param = {COMPANY_CD: "1000", SEQ: selectSeq.value, PW: password};
+			postData(apiUrl, param)
+			.then((res) => {
+				if (nvl(res.map)) {
+					let ite = res.map.ITE;
+					if (ite == "success") {
+						location.href = '/cs_02_reg.html?tk=' + res.map.token;
+					} else {
+						alert("비밀번호를 확인해주세요.");
+					}
+				}
+			})
+			.catch((err) => {
+				console.error('Error sending/receiving data:', err);
+			});
+
+			// 여기에서 비밀번호를 처리하거나 다른 작업을 수행할 수 있습니다.
+			// 처리 후 모달 닫기
+			closeModal();
+		}
+
+		// 입력 폼 초기화
+		passwordInput.value = "";
 	}
 </script>

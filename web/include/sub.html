@@ -44,7 +44,11 @@
         aElement.appendChild(spanElement);
 
         if ('live_comment' == btnId) {
+          if (nvl(item.COM_TP) == '01') {
             aElement.href = '/view_detail_01.html?dmCd=' + item.CODE;
+          } else if (nvl(item.COM_TP) == '02') {
+            aElement.href = '/community_view.html?seq=' + item.CODE;
+          }
         } else if ('community' == btnId) {
           aElement.href = '/community_view.html?seq=' + item.SEQ;
         } else if ('board' == btnId) {

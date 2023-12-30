@@ -22,6 +22,12 @@
 			gtag('js', new Date());
 
 			gtag('config', 'G-43DNNPPKWP');
+
+			$("#m_btn_search").on("click", srchBtn);
+
+			function srchBtn() {
+				location.href = '/view_list_03.html?srchKeyword=' + $('#m_srch_keyword').val();
+			}
 		});
 	</script>
 </head>
@@ -43,8 +49,8 @@
 					<li><a href="view_list_01.html" title="불법대부업"><span>불법대부업</span></a></li>
 					<li><a href="view_list_02.html" title="기타금융사기"><span>기타금융사기</span></a></li>
 					<li><a href="community_list.html" title="커뮤니티"><span>커뮤니티</span></a></li>
-					<!--<li><a href="cs_list.html" title="법률상담문의"><span>법률상담문의</span></a></li>-->
-                    <li><a href="job_list.html" title="일자리찾기"><span>일자리찾기</span></a></li>
+					<!--<li><a href="cs_list.html" title="법률상담문의"><span>법률상담문의</span></a></li>
+                    <li><a href="job_list.html" title="일자리찾기"><span>일자리찾기</span></a></li>-->
 					<li><a href="cs_01.html" title="고객센터"><span>고객센터</span></a></li>
 				</ul>
 			</nav>
@@ -63,7 +69,18 @@
 	<!--// 모바일 사이트 메뉴 -->
 
 	<!-- 검색영역 -->
-	<div class="site_srch_wrap" id="site_srch_wrap"></div>
+	<div class="site_srch_wrap">
+		<div class="srch_inner">
+			<h2>불법대부업 및 금융사기 검색</h2>
+
+			<!-- 검색 input -->
+			<div class="srch">
+				<input type="text" id="m_srch_keyword" placeholder="불법사채업자를 검색하세요.">
+				<button type="submit" id="m_btn_search"><span class="blind">검색</span></button>
+			</div>
+			<!--// 검색 input -->
+		</div>
+	</div>
 	<!--// 검색영역 -->
 
 	<!-- 2023-11-17 서브메뉴추가 -->
@@ -75,8 +92,8 @@
 				<div class="swiper-slide"><a href="/view_list_02.html" title="기타금융사기">기타금융사기</a></div>
 				<div class="swiper-slide"><a href="/community_list.html" title="커뮤니티">커뮤니티</a></div>
 				<div class="swiper-slide"><a href="/cs_01.html" title="고객센터">고객센터</a></div>
-				<!--<div class="swiper-slide"><a href="/cs_list.html" title="법률상담문의">법률상담문의</a></div>-->
-				<div class="swiper-slide"><a href="/job_list.html" title="일자리찾기">일자리찾기</a></div>
+				<!--<div class="swiper-slide"><a href="/cs_list.html" title="법률상담문의">법률상담문의</a></div>
+				<div class="swiper-slide"><a href="/job_list.html" title="일자리찾기">일자리찾기</a></div>-->
 			</div>
 		</div>
 	</div>
@@ -144,7 +161,7 @@
 						</div>
 					</div>
 					<div class="group" id="deposit">
-						<p class="tit">상환계좌</p>
+						<p class="tit">상환계좌 (계좌정보 입력 후 적용 버튼을 클릭해 주세요)</p>
 						<div class="inpt_wrap acc">
 							<select id="ES_Q0009">
 
@@ -152,7 +169,7 @@
 							<input type="text" class="acc_num" id="no_deposit" placeholder="계좌번호를 입력하세요.">
 							<input type="text" id="nm_depositor" placeholder="예금주명">
 							<div class="btn_wrap">
-								<button onclick="depositAdd()" class="btn bg_bk"><span>추가</span></button>
+								<button onclick="depositAdd()" class="btn bg_bk"><span>적용</span></button>
 							</div>
 						</div>
 					</div>

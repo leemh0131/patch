@@ -23,26 +23,45 @@
             gtag('js', new Date());
 
             gtag('config', 'G-43DNNPPKWP');
+
+            let urlParams = new URLSearchParams(location.search);
+
+            let tk = nvl(urlParams.get('tk'));
+
+            if (tk != '') {
+                $("#writeBtn").css('display', 'none');
+                $("#updateBtn").css('display', '');
+
+                postData('http://117.52.84.88:8080/api/web/v1/getCsReg', {TK : tk})
+                    .then((res) => {
+                        if (res.status == -500) {
+                            alert(res.error.message);
+                            location.href = '/cs_02.html';
+                            return;
+                        }
+                        if (nvl(res.map) != '') {
+                            $('#name').val(res.map.NAME);
+                            $('#title').val(res.map.TITLE);
+                            $('#contentss').val(res.map.CONTENTS);
+                        }
+                    })
+                    .catch((err) => {
+                        alert("네트워크 오류가 발생!!.");
+                    });
+            }
+
             /*추가 끝*/
             $("#writeBtn").on("click", setWrite);
 
+            $("#updateBtn").on("click", setUpdate);
+
+            $("#m_btn_search").on("click", srchBtn);
+
+            function srchBtn() {
+                location.href = '/view_list_03.html?srchKeyword=' + $('#m_srch_keyword').val();
+            }
             function setWrite() {
-
-                if (nvl($('#name').val()) == '') {
-                    alert('작성자를 입력해주세요.')
-                    return;
-                }
-                if (nvl($('#pw').val()) == '') {
-                    alert('비밀번호를 입력해주세요.')
-                    return;
-                }
-                if (nvl($('#title').val()) == '') {
-                    alert('제목을 입력해주세요.')
-                    return;
-                }
-
-                if (nvl($('#contentss').val()) == '') {
-                    alert('내용을 입력해주세요.')
+                if (validation()) {
                     return;
                 }
                 let param = {
@@ -54,15 +73,61 @@
                     TITLE : nvl($('#title').val()),
                     CONTENTS : nvl($('#contentss').val()),
                     PW : nvl($('#pw').val()),
-                }
+                };
                 postData('http://117.52.84.88:8080/api/web/v1/setWrite', param)
-                    .then((res) => {
-                        alert('등록이 완료되었습니다.');
-                        location.href = '/community_view.html?seq=' + res.map.SEQ;
-                    })
-                    .catch((err) => {
-                        alert("네트워크 오류가 발생!!.");
-                    });
+                .then((res) => {
+                    alert('등록이 완료되었습니다.');
+                    location.href = '/cs_02.html';
+                })
+                .catch((err) => {
+                    alert("네트워크 오류가 발생!!.");
+                });
+            }
+
+            function setUpdate() {
+                if (validation()) {
+                    return;
+                }
+                let param = {
+                    TK : tk,
+                    NAME : nvl($('#name').val()),
+                    TITLE : nvl($('#title').val()),
+                    CONTENTS : nvl($('#contentss').val()),
+                    PW : nvl($('#pw').val()),
+                };
+                postData('http://117.52.84.88:8080/api/web/v1/setUpdate', param)
+                .then((res) => {
+                    if (res.status == -500) {
+                        alert(res.error.message);
+                        location.href = '/cs_02.html';
+                        return;
+                    }
+                    alert('수정이 완료되었습니다.');
+                    location.href = '/cs_02.html';
+                })
+                .catch((err) => {
+                    alert("네트워크 오류가 발생!!.");
+                });
+            }
+
+            function validation() {
+                if (nvl($('#name').val()) == '') {
+                    alert('작성자를 입력해주세요.')
+                    return true;
+                }
+                if (nvl($('#pw').val()) == '') {
+                    alert('비밀번호를 입력해주세요.')
+                    return true;
+                }
+                if (nvl($('#title').val()) == '') {
+                    alert('제목을 입력해주세요.')
+                    return true;
+                }
+
+                if (nvl($('#contentss').val()) == '') {
+                    alert('내용을 입력해주세요.')
+                    return true;
+                }
             }
         });
     </script>
@@ -105,7 +170,18 @@
     <!--// 모바일 사이트 메뉴 -->
 
     <!-- 검색영역 -->
-    <div class="site_srch_wrap" id="site_srch_wrap"></div>
+    <div class="site_srch_wrap">
+        <div class="srch_inner">
+            <h2>불법대부업 및 금융사기 검색</h2>
+
+            <!-- 검색 input -->
+            <div class="srch">
+                <input type="text" id="m_srch_keyword" placeholder="불법사채업자를 검색하세요.">
+                <button type="submit" id="m_btn_search"><span class="blind">검색</span></button>
+            </div>
+            <!--// 검색 input -->
+        </div>
+    </div>
     <!--// 검색영역 -->
 
     <!-- 2023-11-17 서브메뉴추가 -->
@@ -176,6 +252,9 @@
                 <div class="btn_wrap">
                     <a id="writeBtn" class="btn">
                         <span>등록하기</span>
+                    </a>
+                    <a id="updateBtn" class="btn" style="display: none">
+                        <span>수정하기</span>
                     </a>
                 </div>
                 <!--// 버튼 -->
