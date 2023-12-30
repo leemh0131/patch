@@ -189,7 +189,7 @@
 				$('#borw_site').html(item.BORW_SITE);
 				$('#debtor_tel').html(changeDataMaskFormat(item.DEBTOR_TEL, 'phone'));
 				$('#debtor_kakao').html(item.DEBTOR_KAKAO);
-				$('#dm_kind').html(item.DM_KIND);
+				// $('#dm_kind').html(item.DM_KIND);
 				$('#debtor_tele').html(item.DEBTOR_TELE);
 				$('#debtor_sns').html(item.DEBTOR_SNS);
 				$('#withdr_loca').html(item.WITHDR_LOCA);
@@ -198,7 +198,7 @@
 				if (nvl(detail) != '') {
 					let html = '';
 					for (let i = 0; i < detail.length; i++) {
-						html += detail[i].BANK_NM + ' : ' + changeDataMaskFormat(detail[i].NM_DEPOSITOR, 'name') + ' : ' + changeDataMaskFormat(detail[i].NO_DEPOSIT, 'deposit') + ' ';
+						html += detail[i].BANK_NM + ' : ' + changeDataMaskFormat(detail[i].NM_DEPOSITOR, 'name') + ' : ' + changeDataMaskFormat(detail[i].NO_DEPOSIT, 'deposit') + '\n';
 					}
 					$('#deposit').html(html);
 				} else {
@@ -486,19 +486,19 @@
 					</dl>
 					<dl>
 						<dt>상환계좌</dt>
-						<dd id="deposit"></dd>
+						<pre id="deposit"></pre>
 					</dl>
 					<dl>
 						<dt>스마트출금 위치</dt>
 						<dd id="withdr_loca"></dd>
 					</dl>
-					<dl>
+					<!--<dl>
 						<dt>추심피해(종류)</dt>
 						<dd id="dm_kind"></dd>
-					</dl>
+					</dl>-->
 					<dl>
 						<dt>피해내용</dt>
-						<dd id="dm_contents"></dd>
+						<pre id="dm_contents" ></pre>
 					</dl>
 					<dl>
 						<dt>고소한 경찰서</dt>
