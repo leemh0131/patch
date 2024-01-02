@@ -1,5 +1,14 @@
 <script>
   $(document).ready(function() {
+    setInterval(function() { /* setInterval 시작 */
+      var boxIn = $('#boxIn ul'); /* boxIn 변수에 .boxIn ul 요소 저장 */
+      var boxRow = $('#boxIn ul li:first'); /* boxRow 변수에 첫번째 .boxIn ul li 요소 저장  */
+      var ARea = function(){ /* ARea 변수에 함수 저장 */
+        boxRow.appendTo(boxIn).show(100); /* boxRow 요소를 boxIn 요소 마지막에 추가합니다. show 메서드를 적용합니다. */
+      };
+      $(boxRow).hide(100, ARea); /* boxRow 요소가 300ms로 숨겨지고나면 변수 ARea에 저장 된 콜백 함수가 실행됩니다. */
+    },1000); /* setInterval 이 3초마다 실행됩니다. */
+
     postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanSubInfo', {SIDO: $("#ES_Q0009 option:selected").val(), KEYWORD: $('#police_srch_keyword').val()})
     .then((res) => {
       if (nvl(res.map.list1, '') != '') {
@@ -90,7 +99,7 @@
       <h3 class="tit">실시간 댓글</h3>
     </div>
 
-    <div class="snb_box reply">
+    <div class="snb_box reply" id="boxIn" style="height: 160px;">
       <ul id="live_comment">
       </ul>
     </div>
