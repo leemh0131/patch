@@ -438,7 +438,7 @@ textarea {resize:none; padding:16px 20px; width:100%; height:240px; box-sizing:b
 .view_info dl ~ dl {margin-top:12px;}
 .view_info dl dt {width:125px; font-size:14px; font-weight:700; line-height:1.571em;}
 .view_info dl dd {flex:1; font-size:14px; line-height:1.571em;}
-.view_info dl pre {flex:1; font-size:14px; line-height:1.571em;}
+.view_info dl pre {flex:1; font-size:14px; line-height:1.571em;white-space: pre-wrap;word-wrap: break-word;}
 .view_user {margin-top:64px; margin-bottom:64px;}
 .view_user .user_slide {padding:0px 10px 20px 0;}
 .view_user .user_list.swiper {overflow:visible;}
@@ -449,7 +449,7 @@ textarea {resize:none; padding:16px 20px; width:100%; height:240px; box-sizing:b
 	.view_sec h3 {margin-bottom:16px;}
 	.view_info dl ~ dl {margin-top:8px;}
 	.view_info dl dt, .view_info dl dd {font-size:13px;}
-	.view_info dl dt, .view_info dl pre {font-size:13px;}
+	.view_info dl dt, .view_info dl pre {font-size:13px;white-space: pre-wrap;word-wrap: break-word;}
 	.view_user {margin-bottom:44px;}
 	.view_user .user_list.swiper {overflow:hidden; margin-left:-20px; padding-left:20px; width:calc(100% + 10px); padding-bottom:20px;}
 	.view_user .user_list .swiper-wrapper {gap:0; flex-wrap:nowrap;}
