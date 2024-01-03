@@ -7,7 +7,7 @@
         boxRow.appendTo(boxIn).show(100); /* boxRow 요소를 boxIn 요소 마지막에 추가합니다. show 메서드를 적용합니다. */
       };
       $(boxRow).hide(100, ARea); /* boxRow 요소가 300ms로 숨겨지고나면 변수 ARea에 저장 된 콜백 함수가 실행됩니다. */
-    },1000); /* setInterval 이 3초마다 실행됩니다. */
+    },2500); /* setInterval 이 3초마다 실행됩니다. */
 
     postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanSubInfo', {SIDO: $("#ES_Q0009 option:selected").val(), KEYWORD: $('#police_srch_keyword').val()})
     .then((res) => {
