@@ -59,7 +59,8 @@
 									var adWrap = $('<div>')
 											.addClass('ad_wrap');
 									var anchor = $('<a>')
-											.attr('href', '#');
+											.attr('href', 'tel:' + item.TEL_NO);
+											// .attr('href', '#');
 									var image = $('<img>')
 											.attr('src', item.IMG_URL)
 											.attr('onError', "this.src='assets/images/bg_ad.png'")

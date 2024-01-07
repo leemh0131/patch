@@ -30,7 +30,7 @@ figure img {display:block; width:100%; height:auto; object-fit:cover;}
 #header h1 a img {display:block; width:100%; height:auto;}
 #header nav {margin-left:12.4%; width:52.3%;}
 #header nav ul {display:flex; justify-content:space-between;}
-#header nav ul li a span {display:block; padding:33px 0; font-size:14px; font-weight:700; transition:.3s; position:relative;}
+#header nav ul li a span {display:block; padding:33px 0; font-size:16px; font-weight:700; transition:.3s; position:relative;}
 #header nav ul li a span::after {display:block; content:''; height:2px; background-color:#044BD9; border-radius:1px; position:absolute; bottom:27px; right:50%; left:50%; transition:.3s; opacity:0;}
 #header nav ul li.on a span,
 #header nav ul li:hover a span {color:#044bd9;}
@@ -117,7 +117,12 @@ figure img {display:block; width:100%; height:auto; object-fit:cover;}
 .snb .tit_area .tit {font-weight:700; line-height:1.5em;}
 .snb .tit_area .more {font-size:13px; margin-left:auto; padding-right:18px; background:url(../images/arr_right.svg) no-repeat right center;}
 .snb .tit_area .ad {display:block; border-radius:2px; margin-left:8px; width:30px; height:20px; background-color:#111; text-align:center; line-height:20px; color:#fff; font-size:12px; font-weight:700;}
-.snb .snb_box {overflow:hidden; box-shadow:0 8px 12px rgba(0, 0, 0, 0.08); background-color:#fff; border-radius:2px; padding:24px; box-sizing:border-box;}
+.snb .snb_box {overflow:hidden; box-shadow:0 8px 12px rgba(0, 0, 0, 0.08); background-color:#fff; border-radius:2px;
+	padding-top: 12px;
+	padding-right: 24px;
+	padding-left:  24px;
+	padding-bottom: 24px;
+	box-sizing:border-box;}
 
 /* 목록 */
 .snb_box li ~ li {margin-top:4px;}
@@ -216,6 +221,15 @@ textarea {resize:none; padding:16px 20px; width:100%; height:240px; box-sizing:b
 	overflow-y: auto; /* 세로 스크롤만 표시되도록 설정 */
 
 }
+
+
+/*법률 상담 문의 추가 */
+.law_srch {display:flex;height:400px; }
+
+/* 메인 베너 */
+.law_bnr {width:calc(100% - 16px); padding:38px 32px; background:url(../images/main_bnr.png) no-repeat right center; background-size:cover; box-sizing:border-box;}
+
+
 
 /* 스크롤 바 */
 ::-webkit-scrollbar {

@@ -80,10 +80,10 @@
 
         var adWrap = $('<div>')
                 .addClass('ad_wrap');
-        var anchor = $('<a>');
-                // .attr('href', '#');
+        var anchor = $('<a>')
+                .attr('href', 'tel:' + item.TEL_NO);
         var image = $('<img>')
-                .attr('src', "http://117.52.84.88:8080"+item.IMG_URL)
+                .attr('src', "http://117.52.84.88:8080" + item.IMG_URL)
                 .attr('onError', "this.src='assets/images/bg_ad.png'")
                 .attr('alt', 'AD');
         var figure = $('<figure>')
