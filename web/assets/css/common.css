@@ -211,6 +211,11 @@ textarea {resize:none; padding:16px 20px; width:100%; height:240px; box-sizing:b
 .main_bnr .btn_bnr {margin-top:16px; display:flex; align-items:center; justify-content:center; width:115px; height:32px; background-color:#fff; line-height:1.538em; border-radius:2px; color:#383B40; font-size:12px; font-weight:700;}
 .main_bnr .btn_bnr span {padding-right:24px; background:url(../images/arr_right.svg) no-repeat right center; background-size:20px 20px;}
 
+.main_bnr2 {width:calc(100% - 16px); height: 320px; padding:38px 32px; background:url(../images/main_bnr.png) no-repeat right center; background-size:cover; box-sizing:border-box;}
+.main_bnr2 .txt {color:#fff; font-weight:700; font-size:15px; line-height:1.6em;}
+.main_bnr2 .btn_bnr {margin-top:16px; display:flex; align-items:center; justify-content:center; width:115px; height:32px; background-color:#fff; line-height:1.538em; border-radius:2px; color:#383B40; font-size:12px; font-weight:700;background-size:cover;}
+.main_bnr2 .btn_bnr span {padding-right:24px; background:url(../images/arr_right.svg) no-repeat right center; background-size:20px 20px;}
+
 .srch_form {width:calc(50% - 16px); margin-left:32px; border-radius: 2px; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.08); padding:24px 12px 24px 24px; height: 180px;  box-sizing:border-box;}
 .srch_form .inpt_srch {display:flex; margin-bottom:24px;}
 .srch_form .inpt_srch select {width:129px;}
@@ -280,6 +285,10 @@ textarea {resize:none; padding:16px 20px; width:100%; height:240px; box-sizing:b
 	.main_bnr {width:100%; padding:32px; height:320px; background:url(../images/main_bnr_mo.png) no-repeat center; background-size:cover;}
 	.main_bnr .txt {font-size:18px; line-height:1.556em;}
 	.main_bnr .btn_bnr {margin-top:24px;}
+
+	.main_bnr2 {width:100%; padding:32px; height:320px; background:url(../images/main_bnr_mo.png) no-repeat center; background-size:cover;}
+	.main_bnr2 .txt {font-size:18px; line-height:1.556em;}
+	.main_bnr2 .btn_bnr {margin-top:24px;}
 
 	.srch_form {width:100%; margin-top:64px; margin-left:0; padding:20px 10px 24px 20px; height:290px;}
 	.srch_form .inpt_srch {display:block;}

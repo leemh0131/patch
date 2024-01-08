@@ -27,6 +27,51 @@
 
 
         });
+
+        $(window).resize(function() {
+            updateContainer();
+        });
+
+        let pcImg = '';
+        let pcLink = '';
+        let moImg = '';
+        let moLink = '';
+
+        postData('http://117.52.84.88:8080/api/web/v1/getPrivateImg', {COMPANY_CD: "1000", IMG_URL : "http://117.52.84.88:8080"})
+            .then((res) => {
+                res = res.map;
+
+                if (nvl(res.list, '') != '') {
+                    res.list.forEach((item) => {
+                        if (nvl(item.TABLE_ID == 'PATH_BANNER_PC')) {
+                            pcImg = item.IMG_URL;
+                            pcLink = item.LINK;
+                        } else {
+                            moImg = item.IMG_URL;
+                            moLink = item.LINK;
+                        }
+                    })
+                }
+            })
+            .catch((err) => {
+                alert("네트워크 오류가 발생!!.");
+            });
+
+        function updateContainer() {
+            var $containerHeight = window.innerWidth
+            if ($containerHeight <= 768) {
+                if (nvl(moLink) != '' && nvl(moImg) != '') {
+                    $(".main_bnr2").attr('onclick', 'window.open("'+moLink+'")');
+                    $('.main_bnr2').css('background-image', 'url(' + moImg + ')');
+                }
+            }
+            if ($containerHeight > 768) {
+                if (nvl(pcLink) != '' && nvl(pcImg) != '') {
+                    $(".main_bnr2").attr('onclick', 'window.open("'+pcLink+'")');
+                    $('.main_bnr2').css('background-image', 'url(' + pcImg + ')');
+                }
+            }
+        }
     </script>
 </head>
 <body>
@@ -118,14 +163,7 @@
                 <!-- 2023-11-22 수정 -->
                 <div class="main_srch">
 
-                    <div class="main_bnr" onclick = "window.open('http://pf.kakao.com/_ksxmVb/chat');" style="cursor:pointer;">
-
-                        <!--<p class="txt">
-                            입에 담기 어려운 고민, <br>OOO 사무소가 상담해드리겠습니다.
-                        </p>
-                        <a href="#" class="btn_bnr">
-                            <span>자세히 보기</span>
-                        </a>-->
+                    <div class="main_bnr2" onclick="window.open('http://pf.kakao.com/_ksxmVb/chat');" style="cursor:pointer;" id="main_bnr2">
                     </div>
 
 
