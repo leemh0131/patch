@@ -59,7 +59,7 @@
 
 					var seqDivElement = document.createElement('div');
 					seqDivElement.className = 'comm_num';
-					seqDivElement.textContent = (index+1);
+					seqDivElement.textContent = nvl(data.COMM_NUM, "0");
 
 					var titDivElement = document.createElement('div');
 					titDivElement.className = 'comm_tit';
@@ -75,7 +75,7 @@
 
 					var dateDivElement = document.createElement('div');
 					dateDivElement.className = 'comm_date';
-					dateDivElement.textContent = changeDataFormat(data.DTS, 'date') + "  " + nvl(data.HIT, "0");
+					dateDivElement.innerHTML = changeDataFormat(data.DTS, 'date') + "  <span style='color: red'>(" + nvl(data.HIT, "0") + ")</span>";
 
 					liElement.appendChild(seqDivElement);
 					titDivElement.appendChild(aElement);
