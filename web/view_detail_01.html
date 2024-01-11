@@ -36,6 +36,7 @@
 
 			let dmCd = nvl(urlParams.get('dmCd'));
 			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMDetail', {DM_CD: dmCd})
+			// postData('http://localhost:8080/api/web/v1/getPrivateLoanPlDmMDetail', {DM_CD: dmCd})
 			.then((res) => {
 				if (nvl(res.map.item) != '') {
 					item(res.map.item, res.map.item_detail);
@@ -88,6 +89,7 @@
 						child.push(data);
 					} else {
 						var listItem = document.createElement("li");
+						// listItem.className = "new";
 						var figure = document.createElement("figure");
 						figure.className = "img";
 
@@ -112,18 +114,16 @@
 						dateSpan.textContent = changeDataFormat(data.WRITE_DATE, 'date');
 
 						var replyLink = document.createElement("a");
-						/*replyLink.href = "#";*/
-						replyLink.className = 'reply';
+						if (nvl(data.NEW_VALUE, '') == 'Y') {
+							replyLink.className = 'reply new';
+						} else {
+							replyLink.className = 'reply';
+						}
 						replyLink.textContent = "답글";
-
-						var reportLink = document.createElement("a");
-						reportLink.href = "#";
-						reportLink.textContent = "신고";
 
 						infoWrap.appendChild(idParagraph);
 						infoWrap.appendChild(dateSpan);
 						infoWrap.appendChild(replyLink);
-						infoWrap.appendChild(reportLink);
 
 						var commentParagraph = document.createElement("p");
 						commentParagraph.className = "comment";
@@ -159,19 +159,21 @@
 					var spanDate = document.createElement("span");
 					spanDate.className = "date";
 					spanDate.textContent = changeDataFormat(data.WRITE_DATE, 'date');
-					// a 요소 생성 (신고)
-					var aReport = document.createElement("a");
-					aReport.href = "#";
-					aReport.textContent = "신고";
 					// p 요소 생성 (comment 클래스)
 					var pComment = document.createElement("p");
 					pComment.className = "comment";
 					pComment.textContent = data.CONTENTS;
 
-					// div.info_wrap에 p.id, span.date, a(답글), a(신고) 추가
+					var replyLink = document.createElement("a");
+					if (nvl(data.NEW_VALUE, '') == 'Y') {
+						replyLink.className = 'new';
+						replyLink.style.paddingRight = '0px';
+					}
+
+					// div.info_wrap에 p.id, span.date, a(답글)
 					divInfoWrap.appendChild(pId);
 					divInfoWrap.appendChild(spanDate);
-					divInfoWrap.appendChild(aReport);
+					divInfoWrap.appendChild(replyLink);
 
 					// li 요소에 div.info_wrap, p.comment 추가
 					liElement.appendChild(divInfoWrap);
@@ -389,11 +391,12 @@
 
 			<nav>
 				<ul>
-					<li><a href="reg_01.html" title="피해등록하기"><span>피해등록하기</span></a></li>
+					<li><a href="law_list.html" title="법률상담문의"><span>법률상담문의</span></a></li>
+          <li><a href="reg_01.html" title="피해등록하기"><span>피해등록하기</span></a></li>
 					<li><a href="view_list_01.html" title="불법대부업"><span>불법대부업</span></a></li>
 					<li><a href="view_list_02.html" title="기타금융사기"><span>기타금융사기</span></a></li>
 					<li><a href="community_list.html" title="커뮤니티"><span>커뮤니티</span></a></li>
-					<li><a href="law_list.html" title="법률상담문의"><span>법률상담문의</span></a></li>
+					
                     <li><a href="job_list.html" title="일자리찾기"><span>일자리찾기</span></a></li>
 					<li><a href="cs_01.html" title="고객센터"><span>고객센터</span></a></li>
 				</ul>
@@ -431,12 +434,13 @@
 	<div class="sub_menu">
 		<div class="menu_slide swiper">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide"><a href="/reg_01.html" title="피해등록하기">피해등록하기</a></div>
+				<div class="swiper-slide"><a href="/law_list.html" title="법률상담문의">법률상담문의</a></div>
+        <div class="swiper-slide"><a href="/reg_01.html" title="피해등록하기">피해등록하기</a></div>
 				<div class="swiper-slide"><a href="/view_list_01.html" title="불법대부업">불법대부업</a></div>
 				<div class="swiper-slide"><a href="/view_list_02.html" title="기타금융사기">기타금융사기</a></div>
 				<div class="swiper-slide"><a href="/community_list.html" title="커뮤니티">커뮤니티</a></div>
 				<div class="swiper-slide"><a href="/cs_01.html" title="고객센터">고객센터</a></div>
-				<div class="swiper-slide"><a href="/law_list.html" title="법률상담문의">법률상담문의</a></div>
+				
 				<div class="swiper-slide"><a href="/job_list.html" title="일자리찾기">일자리찾기</a></div>
 			</div>
 		</div>

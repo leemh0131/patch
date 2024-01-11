@@ -2,7 +2,7 @@
   $(document).ready(function() {
     setInterval(function() { /* setInterval 시작 */
       var boxIn = $('#boxIn ul'); /* boxIn 변수에 .boxIn ul 요소 저장 */
-      var boxRow = $('#boxIn ul li:first'); /* boxRow 변수에 첫번째 .boxIn ul li 요소 저장  */
+      var boxRow = $('#boxIn ul li:first'); /* boxRow 변수에 첫번째 .boxIn ul li 요소 저장  */``
       var ARea = function(){ /* ARea 변수에 함수 저장 */
         boxRow.appendTo(boxIn).show(100); /* boxRow 요소를 boxIn 요소 마지막에 추가합니다. show 메서드를 적용합니다. */
       };
@@ -45,6 +45,11 @@
       list.forEach(function (item) {
 
         var liElement = document.createElement('li');
+        if ('community' == btnId || 'board' == btnId) {
+          if (nvl(item.NEW_VALUE, '') == 'Y') {
+            liElement.className = 'new';
+          }
+        }
         var aElement = document.createElement('a');
         var pElement = document.createElement('p');
         var spanElement = document.createElement('span');
