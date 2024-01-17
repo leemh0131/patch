@@ -56,7 +56,7 @@
 
 			function item(item) {
 				$('#title').html(item.TITLE);
-				$('#contentss').html(item.CONTENTS);
+				$('#contentss').html(item.CONTENTS.replace(/\n/g, "<br>"));
 			}
 
 			function comm_list(list) {
