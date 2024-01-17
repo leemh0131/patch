@@ -290,7 +290,7 @@
 				if (nvl(res.map)) {
 					let ite = res.map.ITE;
 					if (ite == "success") {
-						location.href = '/cs_02_reg.html?tk=' + res.map.token;
+						location.href = '/cs_02_reg.html?tk=' + encodeURIComponent(res.map.token);
 					} else {
 						alert("비밀번호를 확인해주세요.");
 					}
