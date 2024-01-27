@@ -12,36 +12,31 @@
 
 	<script type="text/javascript" src="./assets/js/lib/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
-	<script type="text/javascript" src="./assets/js/common.js"></script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-43DNNPPKWP"></script>
-
-	<title>사채패치 - 상세보기</title>
+	<script type="text/javascript" src="./assets/js/common.js"></script>
 	<script>
 		$(document).ready(function() {
-			/*구글 애널리틱스 추가*/
 			window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
 
 			gtag('config', 'G-43DNNPPKWP');
 
-			let moreBtnCount = 1;
-			let urlParams = new URLSearchParams(location.search);
 
 			$("#m_btn_search").on("click", srchBtn);
 
 			function srchBtn() {
 				location.href = '/view_list_03.html?srchKeyword=' + $('#m_srch_keyword').val();
 			}
+			let moreBtnCount = 1;
+			let urlParams = new URLSearchParams(location.search);
 
-			let dmCd = nvl(urlParams.get('dmCd'));
-			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmMDetail', {DM_CD: dmCd})
+			let seq = nvl(urlParams.get('seq'));
+
+			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanCommunityDetail', {SEQ: seq})
 			.then((res) => {
 				if (nvl(res.map.item) != '') {
-					item(res.map.item, res.map.item_detail);
-				}
-				if (nvl(res.map.list) != '') {
-					list(res.map.list);
+					item(res.map.item);
 				}
 				if (nvl(res.map.comm_list) != '') {
 					comm_list(res.map.comm_list);
@@ -58,36 +53,24 @@
 
 			$("#moreBtn").on("click", search);
 
-			function search() {
-				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmCommList', {DM_CD: dmCd, MORE_BTN_COUNT: moreBtnCount})
-						.then((res) => {
-							if (nvl(res.map.list, '') != '') {
-								comm_list(res.map.list);
-							} else {
-								alert("마지막 페이지 입니다.");
-							}
-						})
-						.catch((err) => {
-							alert("네트워크 오류가 발생!!.");
-						});
-				moreBtnCount++;
+			function item(item) {
+				$('#title').html(item.TITLE);
+				$('#contentss').html(item.CONTENTS.replace(/\n/g, "<br>"));
 			}
 
 			function comm_list(list) {
 				var pe = document.getElementById('cmt_list');
 				$('#comm_count').html(list.length);
 
-				//댓글먼저
-
 				let child = [];
 
-				list.forEach(function (data) {
 
+
+				list.forEach(function (data) {
 					if(nvl(data.PARENT_CD) != '') {
 						child.push(data);
 					} else {
 						var listItem = document.createElement("li");
-						// listItem.className = "new";
 						var figure = document.createElement("figure");
 						figure.className = "img";
 
@@ -134,11 +117,8 @@
 
 						pe.appendChild(listItem);
 					}
+				});
 
-
-				})
-
-				//답글
 				child.forEach(function (data) {
 					if(nvl(data.PARENT_CD) == '') return;
 					let parents = $('#' + data.PARENT_CD)[0];
@@ -181,200 +161,144 @@
 					ulElement.appendChild(liElement);
 					parents.append(ulElement);
 				});
+
 			}
 
+			$(document).on("click", ".reply", function() {
+				// 클릭된 요소에 대한 작업 수행
+				var clickedReply = $(this).text();
+				$(".txt_wrap .reply-div").remove();
 
-			function item(item, detail) {
-				$('#comp_nm').html(item.COMP_NM);
-				$('#borw_site').html(item.BORW_SITE);
-				$('#debtor_tel').html(changeDataMaskFormat(item.DEBTOR_TEL, 'phone'));
-				$('#debtor_kakao').html(item.DEBTOR_KAKAO);
-				// $('#dm_kind').html(item.DM_KIND);
-				$('#debtor_tele').html(item.DEBTOR_TELE);
-				$('#debtor_sns').html(item.DEBTOR_SNS);
-				$('#withdr_loca').html(item.WITHDR_LOCA);
-				$('#compl_police').html(item.COMPL_POLICE);
-				$('#dm_contents').html(item.DM_CONTENTS);
-				if (nvl(detail) != '') {
-					let html = '';
-					for (let i = 0; i < detail.length; i++) {
-						html += detail[i].BANK_NM + ' : ' + changeDataMaskFormat(detail[i].NM_DEPOSITOR, 'name') + ' : ' + changeDataMaskFormat(detail[i].NO_DEPOSIT, 'deposit') + '\n';
-					}
-					$('#deposit').html(html);
+				// 클릭된 요소의 부모인 txt_wrap을 찾습니다.
+				var txtWrap = $(this).closest('.txt_wrap');
+
+				var parent = txtWrap[0].id;
+
+				// textWrap 요소 생성
+				var textWrap = document.createElement("div");
+				textWrap.className = "reply-div";
+
+				// inptCmt 요소 생성
+				var inptCmt = document.createElement("div");
+				inptCmt.className = "inpt_cmt";
+
+				// inptCmt2 요소 생성
+				var inptCmt2 = document.createElement("div");
+				inptCmt2.className = "inpt_cmt";
+
+				// inptCmt의 하위에 input 요소 추가
+				var inputNickName = document.createElement("input");
+				inputNickName.type = "text";
+				inputNickName.id = "cmtNickNm";
+				inputNickName.placeholder = "닉네임";
+				inputNickName.maxLength = "10";
+				/*inputNickName.value = parent;*/
+				inptCmt.appendChild(inputNickName);
+
+				var inputPassword = document.createElement("input");
+				inputPassword.type = "password";
+				inputPassword.id = "cmtPassword";
+				inputPassword.placeholder = "비밀번호";
+				inptCmt.appendChild(inputPassword);
+				inptCmt.appendChild(document.createElement("br"));
+
+				// inptCmt2의 하위에 input 요소와 button 요소 추가
+				var inputContents = document.createElement("input");
+				inputContents.type = "text";
+				inputContents.id = "cmtContents";
+				inputContents.placeholder = "댓글 내용을 입력해주세요.";
+				inptCmt2.appendChild(inputContents);
+
+				var divBtnWrap = document.createElement("div");
+				divBtnWrap.className = "btn_wrap";
+
+				var btn = document.createElement("button");
+				btn.className = "btn";
+				btn.textContent = "등록";
+				btn.id = "setReply"
+				btn.setAttribute('parent', parent);
+				btn.style.color = "white";
+
+				console.log(parent, "parent");
+
+				divBtnWrap.appendChild(btn);
+				inptCmt2.appendChild(divBtnWrap);
+
+				// textWrap에 inptCmt와 inptCmt2를 자식 요소로 추가
+				textWrap.appendChild(inptCmt);
+				textWrap.appendChild(inptCmt2);
+
+				// txt_wrap에 추가된 HTML 삽입
+				txtWrap.append(textWrap);
+			});
+
+			$(document).on("click", "#setComm", function() {
+				setComm('basic', '');
+			});
+
+			$(document).on("click", "#setReply", function() {
+				setComm('reply', $(this).attr('parent'));
+			});
+
+			function setComm(chk, parent) {
+				let urlParams = new URLSearchParams(location.search);
+				let seq = nvl(urlParams.get('seq'));
+
+				let nickNm;
+				let password;
+				let contents;
+
+				if(chk == 'basic'){
+					nickNm = $('#nickNm').val();
+					password = $('#password').val();
+					contents = $('#contentsText').val();
 				} else {
-					$('#deposit').html('모름');
+					nickNm = $('#cmtNickNm').val();
+					password = $('#cmtPassword').val();
+					contents = $('#cmtContents').val();
 				}
-			}
 
-			function list(slideData) {
-				var swiperWrapper = document.getElementById('user_list');
-				slideData.forEach(function (data) {
-					var slide = document.createElement('div');
-					slide.className = 'swiper-slide';
+				if (nvl(nickNm) == '') {
+					alert("닉네임을 입력해주세요")
+					return;
+				}
+				if (nvl(password) == '') {
+					alert("비밀번호를 입력해주세요")
+					return;
+				}
+				if (nvl(contents) == '') {
+					alert("내용을 입력해주세요")
+					return;
+				}
 
-					var item = document.createElement('div');
-					if (nvl(data.NEW_VALUE, '') == 'Y') {
-						item.className = 'item new';
-					} else {
-						item.className = 'item new2';
-					}
-
-					var name = document.createElement('p');
-					name.className = 'name';
-					name.textContent = data.COMP_NM;
-
-					var tel = document.createElement('p');
-					tel.className = 'tel';
-					var stel = document.createElement('span');
-					stel.textContent = '연락처 : ' + changeDataMaskFormat(data.DEBTOR_TEL, 'phone');
-					tel.appendChild(stel);
-
-					var infoWrap = document.createElement('div');
-					infoWrap.className = 'info_wrap';
-
-					infoWrap.innerHTML = `
-					  <p>카카오톡 : <span>${data.DEBTOR_KAKAO}</span></p>
-					  <p>텔레그램 : <span>${data.DEBTOR_TELE}</span></p>
-					  <p>기타SNS : <span>${data.DEBTOR_SNS}</span></p>
-					`;
-
-					var btnWrap = document.createElement('div');
-					btnWrap.className = 'btn_wrap';
-
-					var btn = document.createElement('a');
-					btn.href = '/view_detail_01.html?dmCd=' + data.DM_CD;
-					btn.className = 'btn';
-					btn.innerHTML = '<span>자세히보기</span>';
-
-					// Append elements to the DOM
-					btnWrap.appendChild(btn);
-					item.appendChild(name);
-					item.appendChild(tel);
-					item.appendChild(infoWrap);
-					item.appendChild(btnWrap);
-					slide.appendChild(item)
-					swiperWrapper.appendChild(slide);
+				postData('http://117.52.84.88:8080/api/web/v1/setPrivateLoanPlDmComm', {DM_CD: seq, PARENT_CD: parent, NICK_NM: nickNm, PASSWORD: password, CONTENTS: contents})
+				.then((res) => {
+					location.reload();
 				})
+				.catch((err) => {
+					alert("네트워크 오류가 발생!!.");
+				});
+			}
+
+			function search() {
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanPlDmCommList', {DM_CD: seq, MORE_BTN_COUNT: moreBtnCount})
+						.then((res) => {
+							if (nvl(res.map.list, '') != '') {
+								comm_list(res.map.list);
+							} else {
+								alert("마지막 페이지 입니다.");
+							}
+						})
+						.catch((err) => {
+							alert("네트워크 오류가 발생!!.");
+						});
+				moreBtnCount++;
 			}
 		});
-
-		$(document).on("click", ".reply", function() {
-			// 클릭된 요소에 대한 작업 수행
-			var clickedReply = $(this).text();
-			$(".txt_wrap .reply-div").remove();
-
-			// 클릭된 요소의 부모인 txt_wrap을 찾습니다.
-			var txtWrap = $(this).closest('.txt_wrap');
-
-			var parent = txtWrap[0].id;
-
-			// textWrap 요소 생성
-			var textWrap = document.createElement("div");
-			textWrap.className = "reply-div";
-
-			// inptCmt 요소 생성
-			var inptCmt = document.createElement("div");
-			inptCmt.className = "inpt_cmt";
-
-			// inptCmt2 요소 생성
-			var inptCmt2 = document.createElement("div");
-			inptCmt2.className = "inpt_cmt";
-
-			// inptCmt의 하위에 input 요소 추가
-			var inputNickName = document.createElement("input");
-			inputNickName.type = "text";
-			inputNickName.id = "cmtNickNm";
-			inputNickName.placeholder = "닉네임";
-			inputNickName.maxLength = "10";
-			/*inputNickName.value = parent;*/
-			inptCmt.appendChild(inputNickName);
-
-			var inputPassword = document.createElement("input");
-			inputPassword.type = "password";
-			inputPassword.id = "cmtPassword";
-			inputPassword.placeholder = "비밀번호";
-			inptCmt.appendChild(inputPassword);
-			inptCmt.appendChild(document.createElement("br"));
-
-			// inptCmt2의 하위에 input 요소와 button 요소 추가
-			var inputContents = document.createElement("input");
-			inputContents.type = "text";
-			inputContents.id = "cmtContents";
-			inputContents.placeholder = "댓글 내용을 입력해주세요.";
-			inptCmt2.appendChild(inputContents);
-
-			var divBtnWrap = document.createElement("div");
-			divBtnWrap.className = "btn_wrap";
-
-			var btn = document.createElement("button");
-			btn.className = "btn";
-			btn.textContent = "등록";
-			btn.id = "setReply"
-			btn.setAttribute('parent', parent);
-			btn.style.color = "white";
-
-			divBtnWrap.appendChild(btn);
-			inptCmt2.appendChild(divBtnWrap);
-
-			// textWrap에 inptCmt와 inptCmt2를 자식 요소로 추가
-			textWrap.appendChild(inptCmt);
-			textWrap.appendChild(inptCmt2);
-
-			// txt_wrap에 추가된 HTML 삽입
-			txtWrap.append(textWrap);
-		});
-
-		$(document).on("click", "#setComm", function() {
-			setComm('basic', '');
-		});
-
-		$(document).on("click", "#setReply", function() {
-			setComm('reply', $(this).attr('parent'));
-		});
-
-		function setComm(chk, parent) {
-
-			let urlParams = new URLSearchParams(location.search);
-			let dmCd = nvl(urlParams.get('dmCd'));
-
-			let nickNm;
-			let password;
-			let contents;
-
-			if(chk == 'basic'){
-				nickNm = $('#nickNm').val();
-				password = $('#password').val();
-				contents = $('#contentsText').val();
-			} else {
-				nickNm = $('#cmtNickNm').val();
-				password = $('#cmtPassword').val();
-				contents = $('#cmtContents').val();
-			}
-
-			if (nvl(nickNm) == '') {
-				alert("닉네임을 입력해주세요")
-				return;
-			}
-			if (nvl(password) == '') {
-				alert("비밀번호를 입력해주세요")
-				return;
-			}
-			if (nvl(contents) == '') {
-				alert("내용을 입력해주세요")
-				return;
-			}
-
-			postData('http://117.52.84.88:8080/api/web/v1/setPrivateLoanPlDmComm', {DM_CD: dmCd, PARENT_CD: nvl(parent), NICK_NM: nickNm, PASSWORD: password, CONTENTS: contents})
-					.then((res) => {
-						location.reload();
-					})
-					.catch((err) => {
-						alert("네트워크 오류가 발생!!.");
-					});
-		}
-
 	</script>
+	<title>사채패치 - 일자리 톡톡 상세보기</title>
 </head>
+
 <body>
 <!-- #WRAP -->
 <div id="wrap">
@@ -455,69 +379,55 @@
 							<a href="/index.html" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
 						</li>
 						<li>
-							<a href="/view_list_01.html"><span>불법대부업</span></a>
+							<a href="/tok_list.html"><span>일자리 톡톡</span></a>
 						</li>
 					</ul>
 				</div>
-				<div class="sub_tit_area">
-					<h2 id="comp_nm"></h2>
-				</div>
 
-				<!-- 상세 정보 -->
-				<div class="view_sec view_info">
-					<h3>상세정보</h3>
-					<dl>
-						<dt>차용사이트</dt>
-						<dd id="borw_site"></dd>
-					</dl>
-					<dl>
-						<dt>연락처</dt>
-						<dd id="debtor_tel"></dd>
-					</dl>
-					<dl>
-						<dt>카카오톡</dt>
-						<dd id="debtor_kakao"></dd>
-					</dl>
-					<dl>
-						<dt>텔레그램</dt>
-						<dd id="debtor_tele"></dd>
-					</dl>
-					<dl>
-						<dt>기타 SNS</dt>
-						<dd id="debtor_sns"></dd>
-					</dl>
-					<dl>
-						<dt>상환계좌</dt>
-						<pre id="deposit"></pre>
-					</dl>
-					<dl>
-						<dt>스마트출금 위치</dt>
-						<dd id="withdr_loca"></dd>
-					</dl>
-					<!--<dl>
-						<dt>추심피해(종류)</dt>
-						<dd id="dm_kind"></dd>
-					</dl>-->
-					<dl>
-						<dt>피해내용</dt>
-						<pre id="dm_contents" ></pre>
-					</dl>
-					<dl>
-						<dt>고소한 경찰서</dt>
-						<dd id="compl_police"></dd>
-					</dl>
-				</div>
-				<!--// 상세 정보 -->
+				<!-- 상세 -->
+				<div class="detail_wrap">
+					<p class="detail_tit" id="title">
 
-				<!-- 관련 불법사채업자 -->
-				<div class="view_sec view_user">
-					<h3>관련 불법사채업자</h3>
-					<div class="user_list user_slide swiper">
-						<div class="swiper-wrapper" id="user_list">
-						</div>
+					</p>
+					<!-- 관리자등록 -->
+					<div class="view_ui">
+						<p class="txt" id="contentss">
+						</p>
+					</div>
+					<!--// 관리자등록 -->
+
+					<div class="noti_wrap">
+						<p>불법사채정보를 공유하는 곳입니다. 개인정보 또는 명예를 훼손하는 댓글은 제재를 받을 수 있습니다.</p>
 					</div>
 				</div>
-				<!--// 관련 불법사채업자 -->
+
+				<div class="dt_btn btn_wrap">
+					<!--<a href="#" class="btn btn_bdr">
+						<span>수정</span>
+					</a>
+					<a href="#" class="btn btn_bdr">
+						<span>삭제</span>
+					</a>-->
+					<a href="tok_list.html" class="btn">
+						<span>글목록</span>
+					</a>
+				</div>
+				<!--// 상세 -->
+
+				<!-- Mobile AD -->
+				<!--<div class="dt_ad ad_wrap">
+					<a href="#">
+						<figure class="img">
+							<img src="assets/images/bg_ad.png" alt="AD">
+						</figure>
+						<div class="txt_wrap">
+							<p class="name">가법률사무소</p>
+							<p class="txt">광주/목포/순천/여수/전주/군산에서 활동하는<br>경력의 베테랑 사무소</p>
+							<p class="tel">010-0000-0000</p>
+						</div>
+					</a>
+				</div>-->
+				<!--// Mobile AD -->
 
 				<!-- 댓글 -->
 				<div class="comment_wrap">
@@ -551,11 +461,6 @@
 						</ul>
 					</div>
 
-					<!--<div class="btn_wrap">
-						<button class="btn btn_more" id="moreBtn">
-							<span>더보기</span>
-						</button>
-					</div>-->
 				</div>
 				<!--// 댓글 -->
 			</div>

@@ -28,7 +28,7 @@
 			}
 		});
 	</script>
-	<title>사채패치 - 삭제요청</title>
+	<title>사채패치 - 정보요청</title>
 </head>
 
 <body>
@@ -124,13 +124,14 @@
 				<div class="cs_wrap">
 					<div class="cs_tab">
 						<a href="cs_01.html">공지사항</a>
-						<a href="cs_02.html" class="on">삭제요청</a>
-                        <a href="cs_03.html">정보요청</a>
+						<a href="cs_02.html" >삭제요청</a>
+                        <a href="cs_03.html" class="on">정보요청</a>
 					</div>
 
 					<ul id="list">
 						<!-- <li class="lock">
 							<a href="#" class="ctrl_trg">
+								<div class="cs_num">10</div>
 								<div class="cs_num">10</div>
 								<div class="catgy">채용정보 찾기</div>
 								<p class="tit">채용공고에 있는 안심번호에 문자 보내도 될까요?</p>
@@ -160,10 +161,10 @@
 						<button id="moreBtn" class="btn btn_more">
 							<span>더보기</span>
 						</button>
-						<a href="cs_02_reg.html" class="btn">
+						<a href="cs_03_reg.html" class="btn">
 							<span>글쓰기</span>
 						</a>
-						<a href="cs_02_reg.html" class="btn">
+						<a href="cs_03_reg.html" class="btn">
 							<span>글쓰기</span>
 						</a>
 					</div>
@@ -206,7 +207,7 @@
 	$("#moreBtn").on("click", search);
 	function search() {
 		let apiUrl = "http://117.52.84.88:8080/api/web/v1/getPrivateLoanCommunityPaging";
-		let param = {COMPANY_CD: "1000", MORE_BTN_COUNT: moreBtnCount, COMMUNITY_ST: "15", COMMUNITY_TP: "04"};
+		let param = {COMPANY_CD: "1000", MORE_BTN_COUNT: moreBtnCount, COMMUNITY_ST: "15", COMMUNITY_TP: "06"};
 		postData(apiUrl, param)
 		.then((res) => {
 			// 서버로부터 받은 데이터를 사용하여 원하는 작업을 수행
@@ -233,11 +234,21 @@
 							.addClass('catgy')
 							.text(item.COMMUNITY_TP);
 
+					//답변 여부
+					let answer = '답변대기';
+					if (nvl(item.ANSWER_YN) == 'Y') {
+						answer = '답변완료';
+					}
+					var answerDiv = $('<div>')
+							.addClass('catgy')
+							.text(answer);
+
 					// 제목 요소 생성
 					var title = $('<p>')
 							.addClass('tit')
 							.text(item.TITLE);
 					anchor.append(csNum);
+					anchor.append(answerDiv);
 					anchor.append(category);
 					anchor.append(title);
 
@@ -291,7 +302,7 @@
 				if (nvl(res.map)) {
 					let ite = res.map.ITE;
 					if (ite == "success") {
-						location.href = '/cs_02_reg.html?tk=' + encodeURIComponent(res.map.token);
+						location.href = '/cs_03_reg.html?tk=' + encodeURIComponent(res.map.token);
 					} else {
 						alert("비밀번호를 확인해주세요.");
 					}

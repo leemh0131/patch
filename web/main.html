@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<meta name="format-detection" content="telephone=no, address=no, email=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+	<link rel="stylesheet" href="./assets/css/lib/swiper-bundle.min.css">
+	<link rel="stylesheet" href="./assets/css/common.css">
+
+	<script type="text/javascript" src="./assets/js/lib/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
+	<script type="text/javascript" src="./assets/js/common.js"></script>
+    <script type="text/javascript" src="./minitalk/scripts/minitalk.js" charset="UTF-8"></script>
+    
+	<title>메인</title>
+	<script>
+		$(document).ready(function() {
+            
+           
+            
+			$("#police_srch_btn").on("click", policeSrchBtn);
+
+			function policeSrchBtn() {
+				postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanInfoPolice', {SIDO: $("#ES_Q0009 option:selected").val(), KEYWORD: $('#police_srch_keyword').val()})
+				.then((res) => {
+					$("#polices").empty();
+					if (nvl(res.map.list, '') != '') {
+						polices(res.map.list);
+					}
+				})
+				.catch((err) => {
+					alert("네트워크 오류가 발생!!.");
+				});
+			}
+			postData('http://117.52.84.88:8080/api/web/v1/getPrivateLoanMain', {})
+			.then((res) => {
+				if (nvl(res.map.list1, '') != '') {
+					list1(1, res.map.list1);
+				}
+				if (nvl(res.map.list2, '') != '') {
+					list1(2, res.map.list2);
+				}
+				if (nvl(res.map.ES_Q0142) != '') {
+					$("#ES_Q0009").empty();
+					res.map.ES_Q0142.forEach((item) => {
+						let option = `<option value="${item.CODE}">${item.NAME}</option>`;
+						$("#ES_Q0009").append(option);
+					});
+				}
+				if (nvl(res.map.polices, '') != '') {
+					polices(res.map.polices);
+				}
+			})
+			.catch((err) => {
+				alert("네트워크 오류가 발생!!.");
+			}).finally(function () {
+				$('.user_slide').length && userSlide();
+				$('.main_user_slide').length && mainUserSlide();
+			});
+
+			function polices(polices) {
+				var ulElement = document.getElementById('polices');
+				polices.forEach(function (police) {
+
+					var liElement = document.createElement('li');
+					var aElement = document.createElement('a');
+					var strongElement = document.createElement('strong');
+					var pElement = document.createElement('p');
+
+					strongElement.textContent = police.STATION_NAME;
+					pElement.textContent = police.ADDRESS;
+
+					aElement.appendChild(strongElement);
+					aElement.appendChild(pElement);
+					// aElement.href = '#';
+
+					liElement.appendChild(aElement);
+					ulElement.appendChild(liElement);
+				})
+			}
+			function list1(num, slideData) {
+				var swiperWrapper = document.getElementById('swiper-wrapper' + num);
+
+				slideData.forEach(function (data) {
+					var slide = document.createElement('div');
+					slide.className = 'swiper-slide';
+
+					var item = document.createElement('div');
+					if (nvl(data.NEW_VALUE, '') == 'Y') {
+						item.className = 'item new';
+					} else {
+						item.className = 'item new2';
+					}
+
+					var name = document.createElement('p');
+					name.className = 'name';
+					name.textContent = data.COMP_NM;
+
+					var tel = document.createElement('p');
+					tel.className = 'tel';
+					tel.textContent = '연락처 : ' + changeDataMaskFormat(data.DEBTOR_TEL, 'phone');
+
+					var infoWrap = document.createElement('div');
+					infoWrap.className = 'info_wrap';
+
+					// Hardcoded HTML for infoContent
+					infoWrap.innerHTML = `
+					  <p>카카오톡 : <span>${data.DEBTOR_KAKAO}</span></p>
+					  <p>텔레그램 : <span>${data.DEBTOR_TELE}</span></p>
+					  <p>기타SNS : <span>${data.DEBTOR_SNS}</span></p>
+					`;
+
+					var btnWrap = document.createElement('div');
+					btnWrap.className = 'btn_wrap';
+
+					var btn = document.createElement('a');
+					btn.href = '/view_detail_01.html?dmCd=' + data.DM_CD;
+					btn.className = 'btn';
+					btn.innerHTML = '<span>자세히보기</span>';
+
+					// Append elements to the DOM
+					btnWrap.appendChild(btn);
+					item.appendChild(name);
+					item.appendChild(tel);
+					item.appendChild(infoWrap);
+					item.appendChild(btnWrap);
+					slide.appendChild(item);
+					swiperWrapper.appendChild(slide);
+				});
+			}
+		})
+	</script>
+</head>
+<body>
+<!-- #WRAP -->
+<div id="wrap">
+	<!-- #header -->
+	<header id="header"></header>
+	<!--// #header -->
+
+	<!-- 모바일 사이트 메뉴 -->
+	<div class="m_gnb_wrap" id="m_gnb_wrap"></div>
+	<!--// 모바일 사이트 메뉴 -->
+
+	<!-- 검색영역 -->
+	<div class="site_srch_wrap" id="site_srch_wrap"></div>
+	<!--// 검색영역 -->
+
+	<!-- 2023-11-17 서브메뉴추가 -->
+	<div class="sub_menu">
+		<div class="menu_slide swiper">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide"><a href="/reg_01.html" title="피해등록하기">피해등록하기</a></div>
+				<div class="swiper-slide"><a href="/view_list_01.html" title="불법대부업">불법대부업</a></div>
+				<div class="swiper-slide"><a href="/view_list_02.html" title="기타금융사기">기타금융사기</a></div>
+				<div class="swiper-slide"><a href="/community_list.html" title="커뮤니티">커뮤니티</a></div>
+				<!--<div class="swiper-slide"><a href="/cs_list.html" title="법률상담문의">법률상담문의</a></div>
+				<div class="swiper-slide"><a href="/job_list.html" title="일자리찾기">일자리찾기</a></div>-->
+			</div>
+		</div>
+	</div>
+	<!--// 2023-11-17 서브메뉴추가 -->
+
+	<!-- #contents -->
+	<div id="contents" class="main">
+		<div class="inner">
+			<div class="content">
+				<!-- 채팅영역 PC -->
+				<div style="width: 100%;height:400px">
+					
+                       
+                        <script>
+                        
+                         new Minitalk({
+                            id:"sctalk",
+                            channel:"sc112",
+                            width:"100%",
+                            height:"100%"
+                        });
+                        
+                        </script>
+                        
+				</div>
+				<!--// 채팅영역 PC -->
+
+				<!-- 채팅영역 Mobile -->
+				<!--// 채팅영역 Mobile -->
+
+				<section class="user_sec">
+					<div class="sec_tit">
+						<h3 class="tit">실시간 등록 불법사채</h3>
+						<a href="view_list_01.html" class="more">더보기</a>
+					</div>
+					<div class="user_list user_slide swiper">
+						<div class="swiper-wrapper" id="swiper-wrapper1">
+						</div>
+					</div>
+				</section>
+				<!-- 2023-11-22 수정 -->
+				<div class="main_srch">
+					<div class="main_bnr">
+						<p class="txt">
+							입에 담기 어려운 고민, <br>OOO 사무소가 상담해드리겠습니다.
+						</p>
+						<a href="#" class="btn_bnr">
+							<span>자세히 보기</span>
+						</a>
+					</div>
+					<div class="srch_form">
+						<div class="inpt_srch">
+							<select id="ES_Q0009"></select>
+
+
+							<!-- 검색 input -->
+							<div class="srch">
+								<input type="text" id="police_srch_keyword" onkeydown="javascript:if(event.keyCode == 13) document.getElementById('police_srch_btn').click();" placeholder="관할경찰서 검색">
+								<button type="submit" id="police_srch_btn"><span class="blind">검색</span></button>
+							</div>
+							<!--// 검색 input -->
+						</div>
+						<div class="res_wrap">
+							<p class="txt">검색결과 <em id="police_count">2</em>개</p>
+							<ul id="polices">
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!--// 2023-11-22 수정 -->
+				<section class="user_sec">
+					<div class="sec_tit">
+						<h3 class="tit">실시간 등록 기타금전사기</h3>
+						<a href="view_list_02.html" class="more">더보기</a>
+					</div>
+					<div class="user_list main_user_slide swiper">
+						<div class="swiper-wrapper" id="swiper-wrapper2">
+
+						</div>
+					</div>
+				</section>
+			</div>
+
+			<!-- 사이드 메뉴 -->
+			<div class="snb" id="sub"></div>
+			<!--// 사이드 메뉴 -->
+		</div>
+	</div>
+	<!--// #contents -->
+
+	<!-- #footer -->
+	<footer id="footer"></footer>
+	<!--// #footer -->
+</div>
+<!-- // WRAP -->
+</body>
+</html>

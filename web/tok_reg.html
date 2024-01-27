@@ -14,64 +14,63 @@
     <script type="text/javascript" src="./assets/js/lib/swiper-bundle.min.js"></script>
     <script type="text/javascript" src="./assets/js/common.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-43DNNPPKWP"></script>
-    <title>사채패치 - 법률상담문의</title>
+    <title>사채패치 - 일자리톡톡 등록하기</title>
     <script>
         $(document).ready(function() {
-            /*추가 구글 애널리틱스*/
+            /*구글 애널리틱스 추가*/
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'G-143DNNPPKWP');
+            gtag('config', 'G-43DNNPPKWP');
             /*추가 끝*/
+            $("#writeBtn").on("click", setWrite);
 
+            function setWrite() {
 
-        });
+                if (nvl($('#name').val()) == '') {
+                    alert('작성자를 입력해주세요.')
+                    return;
+                }
+                if (nvl($('#pw').val()) == '') {
+                    alert('비밀번호를 입력해주세요.')
+                    return;
+                }
+                if (nvl($('#title').val()) == '') {
+                    alert('제목을 입력해주세요.')
+                    return;
+                }
 
-        $(window).resize(function() {
-            updateContainer();
-        });
-
-        let pcImg = '';
-        let pcLink = '';
-        let moImg = '';
-        let moLink = '';
-
-        postData('http://117.52.84.88:8080/api/web/v1/getPrivateImg', {COMPANY_CD: "1000", IMG_URL : "http://117.52.84.88:8080"})
-            .then((res) => {
-                res = res.map;
-
-                if (nvl(res.list, '') != '') {
-                    res.list.forEach((item) => {
-                        if (nvl(item.TABLE_ID == 'PATH_BANNER_PC')) {
-                            pcImg = item.IMG_URL;
-                            pcLink = item.LINK;
-                        } else {
-                            moImg = item.IMG_URL;
-                            moLink = item.LINK;
-                        }
+                if (nvl($('#contentss').val()) == '') {
+                    alert('내용을 입력해주세요.')
+                    return;
+                }
+                let param = {
+                    COMPANY_CD : '1000',
+                    COMMUNITY_GB : '02',
+                    COMMUNITY_TP : '05',
+                    COMMUNITY_ST : '14',
+                    NAME : nvl($('#name').val()),
+                    TITLE : nvl($('#title').val()),
+                    CONTENTS : nvl($('#contentss').val()),
+                    PW : nvl($('#pw').val()),
+                }
+                postData('http://117.52.84.88:8080/api/web/v1/setWrite', param)
+                    .then((res) => {
+                        alert('등록이 완료되었습니다.');
+                        location.href = '/tok_view.html?seq=' + res.map.SEQ;
                     })
-                }
-            })
-            .catch((err) => {
-                alert("네트워크 오류가 발생!!.");
-            });
+                    .catch((err) => {
+                        alert("네트워크 오류가 발생!!.");
+                    });
+            }
 
-        function updateContainer() {
-            var $containerHeight = window.innerWidth
-            if ($containerHeight <= 768) {
-                if (nvl(moLink) != '' && nvl(moImg) != '') {
-                    $(".main_bnr2").attr('onclick', 'window.open("'+moLink+'")');
-                    $('.main_bnr2').css('background-image', 'url(' + moImg + ')');
-                }
+            $("#m_btn_search").on("click", srchBtn);
+
+            function srchBtn() {
+                location.href = '/view_list_03.html?srchKeyword=' + $('#m_srch_keyword').val();
             }
-            if ($containerHeight > 768) {
-                if (nvl(pcLink) != '' && nvl(pcImg) != '') {
-                    $(".main_bnr2").attr('onclick', 'window.open("'+pcLink+'")');
-                    $('.main_bnr2').css('background-image', 'url(' + pcImg + ')');
-                }
-            }
-        }
+        });
     </script>
 </head>
 <body>
@@ -154,45 +153,51 @@
                             <a href="/index.html" class="home"><img src="assets/images/ico_home.svg" alt=""></a>
                         </li>
                         <li>
-                            <a href="/law_list.html"><span>법률상담문의</span></a>
+                            <a href="/community_list.html"><span>일자리 톡톡</span></a>
                         </li>
                     </ul>
                 </div>
-                <div class="sub_tit_area">
-                    <h2>법률상담문의</h2>
+                <div class="sub_tit_area tab_tit">
+                    <h2>일자리톡톡 등록하기</h2>
+
                 </div>
 
-                <!-- 2023-11-22 수정 -->
-                <div class="main_srch">
-
-                    <div class="main_bnr2" onclick="window.open('http://pf.kakao.com/_ksxmVb/chat');" style="cursor:pointer;" id="main_bnr2">
+                <div class="reg_form">
+                    <div class="group">
+                        <p class="tit">작성자</p>
+                        <div class="inpt_wrap">
+                            <input type="text" id="name" placeholder="작성자">
+                        </div>
+                    </div>
+                    <div class="group">
+                        <p class="tit">비밀번호</p>
+                        <div class="inpt_wrap">
+                            <input type="password" id="pw" placeholder="비밀번호">
+                        </div>
+                    </div>
+                    <div class="group">
+                        <p class="tit">제목</p>
+                        <div class="inpt_wrap">
+                            <input type="text" id="title" placeholder="제목">
+                        </div>
+                    </div>
+                    <!--    to-do  내용 에디터 이용     -->
+                    <div class="group">
+                        <p class="tit">내용</p>
+                        <div class="inpt_wrap">
+                            <textarea id="contentss" placeholder="직접 입력하세요."></textarea>
+                        </div>
                     </div>
 
-
                 </div>
-                <!--// 2023-11-22 수정 -->
-                <!-- 고객센터 -->
-        				<div class="cs_wrap">
-        					<div class="cs_tab">
-        						
-        						
-        					</div>
-        
-        					<ul id="list">
-        						<li>
-        
-        						</li>
-        					</ul>
-        
-        					<!-- 버튼 -->
-        					<div class="btn_wrap">
-        						<button id="moreBtn" class="btn btn_more">
-        							<span>더보기</span>
-        						</button>
-        					</div>
-        					<!--// 버튼 -->
-        				</div>
-        				<!-- // 고객센터 -->
+
+                <!-- 버튼 -->
+                <div class="btn_wrap">
+                    <a id="writeBtn" class="btn">
+                        <span>등록하기</span>
+                    </a>
+                </div>
+                <!--// 버튼 -->
             </div>
 
             <!-- 사이드 메뉴 -->
@@ -202,82 +207,6 @@
     </div>
     <!--// #contents -->
 
-<script>
-
-	let moreBtnCount = 0;
-	search();
-	let index = 1;
-	$("#moreBtn").on("click", search);
-	function search() {
-		let apiUrl = "http://117.52.84.88:8080/api/web/v1/getPrivateNotice";
-		let param = {COMPANY_CD : "1000", BOARD_TYPE : "05", LIMIT : 10, OFFSET : moreBtnCount};
-		postData(apiUrl, param)
-				.then((res) => {
-					// 서버로부터 받은 데이터를 사용하여 원하는 작업을 수행
-					console.log('Received data:', res);
-					res = res.map;
-
-					if (nvl(res.list, '') != '') {
-						res.list.forEach((item) => {
-
-							// 리스트 아이템 생성
-							var listItem = $('<li>');
-
-							// 앵커 요소 생성
-							var anchor = $('<a>')
-									.attr('href', '#')
-									.addClass('ctrl_trg');
-
-
-							// 숫자 요소 생성
-							var csNum = $('<div>')
-									.addClass('cs_num')
-									.text(index++);
-
-							// 카테고리 요소 생성
-							var category = $('<div>')
-									.addClass('catgy')
-									.text(item.BOARD_ST_NM);
-
-							// 제목 요소 생성
-							var title = $('<p>')
-									.addClass('tit')
-									.text(item.TITLE);
-							anchor.append(csNum);
-							anchor.append(category);
-							anchor.append(title);
-
-							// 답변 랩 요소 생성
-							var answerWrap = $('<div>')
-									.addClass('ans_wrap');
-
-							var answerText = $('<p>')
-									.html(item.CONTENTS);
-							answerWrap.append(answerText);
-
-							// 리스트 아이템에 앵커 요소 추가
-							listItem.append(anchor);
-							listItem.append(answerWrap);
-
-							$('#list').append(listItem);
-						});
-						moreBtnCount++;
-					} else {
-						alert("마지막 페이지 입니다.");
-					}
-
-				})
-				.catch((err) => {
-					alert("네트워크 오류가 발생!!.");
-					console.error('Error sending/receiving data:', err); // 데이터 전송 또는 수신 중 오류 발생 시 메시지 출력
-				});
-
-	}
-
-
-
-
-</script>
 
     <!-- #footer -->
     <footer id="footer"></footer>

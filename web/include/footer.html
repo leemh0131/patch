@@ -1,24 +1,56 @@
+<style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+        z-index: 10;
+    }
+    #popup {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      text-align: left;
+    }
+    #close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+    }
+  </style>
+
 <div class="inner">
     <h1>
         <img src="assets/images/logo_f.png" alt="사채패스">
     </h1>
     <div class="fnb_wrap">
         <ul>
-            <li><a href="#" title="이용약관 ">이용약관</a></li>
+            <li><a href="javascript:openPopup();" title="이용약관 ">이용약관</a></li>
             <li><a href="#" title="개인정보 처리방침">개인정보 처리방침</a></li>
             <li><a href="#" title="이메일무단수집거부">이메일무단수집거부</a></li>
-            <li><a href="#" title="광고문의">광고문의</a></li>
-            <li><a href="#" title="자주묻는 질문">자주묻는 질문</a></li>
+            <!--<li><a href="#" title="광고문의">광고문의</a></li>
+            <li><a href="#" title="자주묻는 질문">자주묻는 질문</a></li> -->
         </ul>
         <div class="info_wrap">
             <div class="txt_wrap">
-                <p>대표 : OOO </p>
-                <p>사업자등록번호 : 000-00-00000</p>
+                <p>상호 : 프라이빗솔루션 </p>
+                <p>대표 : 박윤선 </p>
+                
             </div>
             <div class="txt_wrap mo_txt">
-                <p>서울 강남구 강남대로00길 00 00빌딩 0층</p>
-                <p>Tel : 010-0000-0000</p>
-                <p>E-mail : contact@sachepatch.com</p>
+                <p>서울 서울특별시 금천구 가산디지털1로 171, 306호</p>
+                
+                <p>E-mail : lawann2612@gmail.com</p>
             </div>
             <div class="txt_wrap">
                 <p>Copyright sachepatch © 2023. All rights reserved.</p>
@@ -27,9 +59,40 @@
     </div>
     <div class="cs_info">
         <p class="tit">고객센터</p>
-        <strong>02-0000-0000</strong>
+        <strong>lawann2612@gmail.com</strong>
         <p class="txt">
             평일 09:00~18:00 / 점심시간 12:00~13:00<br>(주말 및 공휴일 휴무)
         </p>
     </div>
 </div>
+
+
+
+<div id="overlay">
+  <div id="popup">
+    <div id="close" onclick="closePopup()">X</div>
+    <h2>이용약관</h2>
+    <p>이용약관 내용을 여기에 입력하세요.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. ...</p>
+    <!-- 여기에 이용약관 내용을 추가하세요. -->
+
+    <!-- 동의 버튼 등을 추가하세요. -->
+    <button onclick="closePopup()">동의</button>
+  </div>
+</div>
+
+
+
+
+<script>
+  function openPopup() {
+    document.getElementById("overlay").style.display = "flex";
+  }
+
+  function closePopup() {
+    document.getElementById("overlay").style.display = "none";
+  }
+
+  // 페이지 로드시 자동으로 팝업을 열고 싶다면 아래 코드를 사용하세요.
+  // window.onload = openPopup;
+</script>

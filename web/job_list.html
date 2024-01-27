@@ -46,7 +46,6 @@
 					moreBtnCount = 0;
 				}
 
-				//postData('http://localhost:8080/api/web/v1/getPrivateJobList', {COMPANY_CD: "1000", LIMIT : 9, OFFSET : moreBtnCount, L_JOB_ZONE : L_JOB_ZONE, IMG_URL : "http://117.52.84.88:8080"})
 				postData('http://117.52.84.88:8080/api/web/v1/getPrivateJobList', {COMPANY_CD: "1000", LIMIT : 9, OFFSET : moreBtnCount, L_JOB_ZONE : L_JOB_ZONE, IMG_URL : "http://117.52.84.88:8080"})
 						.then((res) => {
 							res = res.map;
@@ -75,7 +74,8 @@
 											.text(item.JOB_NM);
 									var descriptionText = $('<p>')
 											.addClass('txt')
-											.html(item.JOB_ZONE_NM + "에서<br>" + item.JOB_TEXT);
+                      .html("<span style='color:red;'>"+item.JOB_ZONE_NM + "</span><br>" + item.JOB_TEXT);                                                                                               
+										
 									var telText = $('<p>')
 											.addClass('tel')
 											.text(item.TEL_NO);
@@ -195,6 +195,13 @@
 				<div class="sub_tit_area">
 					<h2>일자리 찾기</h2>
 				</div>
+
+        <div class="cs_tab">
+						<a href="job_list.html" class="on">일자리 찾기</a>
+						<a href="tok_list.html">일자리 톡톡</a>
+				</div>
+        </br>
+
 
 				<div class="loc_tab">
 					<ul>

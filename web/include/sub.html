@@ -101,7 +101,7 @@
                 .text(item.JOB_NM);
         var descriptionText = $('<p>')
                 .addClass('txt')
-                .html(item.JOB_ZONE_NM + "에서<br>" + item.JOB_TEXT);
+                .html("<span style='color:red;'>"+item.JOB_ZONE_NM + "</span><br>" + item.JOB_TEXT);
         var telText = $('<p>')
                 .addClass('tel')
                 .text(item.TEL_NO);
