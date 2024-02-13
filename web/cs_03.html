@@ -227,7 +227,7 @@
 					// 숫자 요소 생성
 					var csNum = $('<div>')
 							.addClass('cs_num')
-							.text(index++);
+							.text(nvl(item.COMM_NUM, "0"));
 
 					// 카테고리 요소 생성
 					var category = $('<div>')
